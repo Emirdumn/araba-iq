@@ -1,4 +1,4 @@
-# ArabaIQ — PostgreSQL for araba-iq-api (local development)
+# ArabaIQ — full development stack
 services:
   araba-iq-db:
     image: postgres:16-alpine
@@ -15,6 +15,38 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+
+  araba-iq-api:
+    build:
+      context: ./araba-iq-api
+      dockerfile: Dockerfile
+    ports:
+      - "8100:8100"
+    environment:
+      DATABASE_URL: "postgresql://araba_iq:${ARABA_IQ_DB_PASSWORD:-changeme}@araba-iq-db:5432/araba_iq"
+      CORS_ORIGINS: "http://localhost:3000,http://127.0.0.1:3000"
+      SEED_DEMO: "${SEED_DEMO:-false}"
+    volumes:
+      - ./araba-iq-api:/app
+    depends_on:
+      araba-iq-db:
+        condition: service_healthy
+    command: ["--reload"]
+
+  araba-iq-frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:3000"
+    environment:
+      NEXT_PUBLIC_ARABAIQ_API_URL: "http://localhost:8100/api/v1"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - /app/.next
+    depends_on:
+      - araba-iq-api
 
 volumes:
   araba_iq_postgres_data:
