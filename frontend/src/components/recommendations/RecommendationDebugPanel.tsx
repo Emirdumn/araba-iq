@@ -18,7 +18,7 @@ export function RecommendationDebugPanel({ excluded, t }: Props) {
         {excluded.map((e) => (
           <li key={e.car_id} className="rounded-lg bg-white/80 p-2 border border-violet-200/60">
             <span className="font-mono text-violet-800">#{e.car_id}</span>{" "}
-            <span className="text-[#2d3a2a]">{e.car_name}</span>
+            <span className="text-[#0d1117]">{e.car_name}</span>
             <p className="text-xs text-violet-900/80 mt-1">{e.reason}</p>
           </li>
         ))}

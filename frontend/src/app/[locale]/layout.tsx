@@ -7,7 +7,7 @@ const locales = ["tr", "en"];
 
 type Props = {
   children: React.ReactNode;
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 };
 
 export function generateStaticParams() {
@@ -15,7 +15,8 @@ export function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const isTr = params.locale === "tr";
+  const { locale } = await params;
+  const isTr = locale === "tr";
   return {
     title: {
       template: "%s | ArabaIQ",
@@ -36,7 +37,7 @@ async function getMessages(locale: string) {
 }
 
 export default async function LocaleLayout({ children, params }: Props) {
-  const { locale } = params;
+  const { locale } = await params;
 
   if (!locales.includes(locale)) {
     notFound();
