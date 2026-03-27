@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api.routes import brands, cars, health, market, recommendations, scoring, segments, vehicle_models
+from app.api.routes import brands, cars, health, market, recommendations, scoring, segments, vehicle_models, sahibinden
 from app.core.config import settings
 
 app = FastAPI(
@@ -28,6 +28,7 @@ app.include_router(cars.router, prefix=settings.api_v1_prefix)
 app.include_router(market.router, prefix=settings.api_v1_prefix)
 app.include_router(scoring.router, prefix=settings.api_v1_prefix)
 app.include_router(recommendations.router, prefix=settings.api_v1_prefix)
+app.include_router(sahibinden.router, prefix=settings.api_v1_prefix)
 
 
 @app.get("/")

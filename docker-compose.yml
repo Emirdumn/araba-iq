@@ -24,7 +24,7 @@ services:
       - "8100:8100"
     environment:
       DATABASE_URL: "postgresql://araba_iq:${ARABA_IQ_DB_PASSWORD:-changeme}@araba-iq-db:5432/araba_iq"
-      CORS_ORIGINS: "http://localhost:3000,http://127.0.0.1:3000"
+      CORS_ORIGINS: "http://localhost:3000,http://127.0.0.1:3000,http://arabaiq.com,https://arabaiq.com,http://www.arabaiq.com,https://www.arabaiq.com"
       SEED_DEMO: "${SEED_DEMO:-false}"
     volumes:
       - ./araba-iq-api:/app
@@ -40,7 +40,7 @@ services:
     ports:
       - "3000:3000"
     environment:
-      NEXT_PUBLIC_ARABAIQ_API_URL: "http://localhost:8100/api/v1"
+      NEXT_PUBLIC_ARABAIQ_API_URL: "https://arabaiq.com/api/v1"
     volumes:
       - ./frontend:/app
       - /app/node_modules

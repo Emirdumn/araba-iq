@@ -1,0 +1,465 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<brands xmlns="http://www.auto-data.net/">
+	<brand>
+		<update>2020-12-04 08:03:51</update>
+		<name>Rover</name>
+		<id>119</id>
+		<models>
+			<model>
+				<update>2024-11-05 14:35:32</update>
+				<name>MGF</name>
+				<id>1230</id>
+				<generations>
+					<generation>
+						<prototype>0</prototype>
+						<update>2024-11-05 14:35:03</update>
+						<name>MGF (RD)</name>
+						<modelYear>1995</modelYear>
+						<id>2466</id>
+						<modifications>
+							<modification>
+								<id>11653</id>
+								<update>2024-11-06 09:47:33</update>
+								<brand>Rover</brand>
+								<model>MGF</model>
+								<generation>MGF (RD)</generation>
+								<engine>1.8 i VVC (145 bg)</engine>
+								<powertrain>İçten yanmalı motor</powertrain>
+								<doors>2</doors>
+								<doorsMin>2</doorsMin>
+								<power>145/7000</power>
+								<powerHp>145</powerHp>
+								<powerRpm>7000</powerRpm>
+								<powerRpmLow>7000</powerRpmLow>
+								<maxspeed>212</maxspeed>
+								<acceleration>7.7</acceleration>
+								<tankVolume>50</tankVolume>
+								<yearstart>1995</yearstart>
+								<yearstop>2000</yearstop>
+								<coupe>Cabriolet</coupe>
+								<places>2</places>
+								<placesMin>2</placesMin>
+								<length>3913</length>
+								<width>1628</width>
+								<height>1270</height>
+								<heightMin>1270</heightMin>
+								<wheelbase>2375</wheelbase>
+								<frontTrack>1400</frontTrack>
+								<frontTrackMin>1400</frontTrackMin>
+								<rearTrack>1406</rearTrack>
+								<rearTrackMin>1406</rearTrackMin>
+								<luggageMin>209</luggageMin>
+								<luggageMinMin>209</luggageMinMin>
+								<engineCode>18K4K</engineCode>
+								<engineposition>Orta, enine</engineposition>
+								<engineDisplacement>1796</engineDisplacement>
+								<torque>174/4500</torque>
+								<torqueNm>174</torqueNm>
+								<torqueRpm>4500</torqueRpm>
+								<torqueRpmLow>4500</torqueRpmLow>
+								<fuelSystem>Çok noktalı enjeksiyon</fuelSystem>
+								<turbine>Atmosferik motor</turbine>
+								<valvetrain>DOHC</valvetrain>
+								<positioncilinders>Sıralı</positioncilinders>
+								<cilinders>4</cilinders>
+								<bore>80</bore>
+								<stroke>89.3</stroke>
+								<compressionRatio>10.5</compressionRatio>
+								<valvesPerCilinder>4</valvesPerCilinder>
+								<fuel>Benzin</fuel>
+								<drive>Arkadan İtiş</drive>
+								<gearboxMT>5</gearboxMT>
+								<frontSuspension>Çift salıncaklı</frontSuspension>
+								<rearSuspension>Çift salıncaklı</rearSuspension>
+								<frontBrakes>Hava soğutmalı diskler</frontBrakes>
+								<rearBrakes>Disk</rearBrakes>
+								<abs>1</abs>
+								<steeringType>Direksiyon kutusu</steeringType>
+								<powerSteering>Hidrolik Direksiyon</powerSteering>
+								<fuelConsumptionCombined>6.9</fuelConsumptionCombined>
+								<fuelConsumptionCombinedMin>6.9</fuelConsumptionCombinedMin>
+								<curbWeight>1060</curbWeight>
+								<curbWeightMin>1060</curbWeightMin>
+								<maxWeight>1320</maxWeight>
+								<maxWeightMin>1320</maxWeightMin>
+							</modification>
+							<modification>
+								<id>11652</id>
+								<update>2024-11-06 09:47:35</update>
+								<brand>Rover</brand>
+								<model>MGF</model>
+								<generation>MGF (RD)</generation>
+								<engine>1.8 i (120 bg)</engine>
+								<powertrain>İçten yanmalı motor</powertrain>
+								<doors>2</doors>
+								<doorsMin>2</doorsMin>
+								<power>120/5500</power>
+								<powerHp>120</powerHp>
+								<powerRpm>5500</powerRpm>
+								<powerRpmLow>5500</powerRpmLow>
+								<maxspeed>193</maxspeed>
+								<acceleration>9.2</acceleration>
+								<tankVolume>50</tankVolume>
+								<yearstart>1995</yearstart>
+								<yearstop>2000</yearstop>
+								<coupe>Cabriolet</coupe>
+								<places>2</places>
+								<placesMin>2</placesMin>
+								<length>3913</length>
+								<width>1628</width>
+								<height>1270</height>
+								<heightMin>1270</heightMin>
+								<wheelbase>2375</wheelbase>
+								<luggageMin>209</luggageMin>
+								<luggageMinMin>209</luggageMinMin>
+								<engineCode>18K4F</engineCode>
+								<engineposition>Orta, enine</engineposition>
+								<engineDisplacement>1796</engineDisplacement>
+								<torque>160/4000</torque>
+								<torqueNm>160</torqueNm>
+								<torqueRpm>4000</torqueRpm>
+								<torqueRpmLow>4000</torqueRpmLow>
+								<fuelSystem>Çok noktalı enjeksiyon</fuelSystem>
+								<turbine>Atmosferik motor</turbine>
+								<valvetrain>DOHC</valvetrain>
+								<positioncilinders>Sıralı</positioncilinders>
+								<cilinders>4</cilinders>
+								<bore>80</bore>
+								<stroke>89.3</stroke>
+								<compressionRatio>10.5</compressionRatio>
+								<valvesPerCilinder>4</valvesPerCilinder>
+								<fuel>Benzin</fuel>
+								<drive>Arkadan İtiş</drive>
+								<gearboxMT>5</gearboxMT>
+								<frontSuspension>Çift salıncaklı</frontSuspension>
+								<rearSuspension>Çift salıncaklı</rearSuspension>
+								<frontBrakes>Hava soğutmalı diskler</frontBrakes>
+								<rearBrakes>Disk</rearBrakes>
+								<abs>1</abs>
+								<steeringType>Direksiyon kutusu</steeringType>
+								<powerSteering>Hidrolik Direksiyon</powerSteering>
+								<fuelConsumptionCombined>6.7</fuelConsumptionCombined>
+								<fuelConsumptionCombinedMin>6.7</fuelConsumptionCombinedMin>
+								<curbWeight>1060</curbWeight>
+								<curbWeightMin>1060</curbWeightMin>
+								<maxWeight>1320</maxWeight>
+								<maxWeightMin>1320</maxWeightMin>
+							</modification>
+						</modifications>
+					</generation>
+				</generations>
+			</model>
+			<model>
+				<update>2020-12-04 08:03:51</update>
+				<name>Mini MK</name>
+				<id>1221</id>
+				<generations>
+					<generation>
+						<prototype>0</prototype>
+						<update>2021-01-05 21:49:32</update>
+						<name>Mini MK I</name>
+						<modelYear>1990</modelYear>
+						<id>2447</id>
+						<modifications>
+							<modification>
+								<id>29118</id>
+								<brand>Rover</brand>
+								<model>Mini MK</model>
+								<generation>Mini MK I</generation>
+								<engine>1.3i (50 bg) Automatic</engine>
+								<powertrain>İçten yanmalı motor</powertrain>
+								<doors>3</doors>
+								<doorsMin>3</doorsMin>
+								<power>50/5000</power>
+								<powerHp>50</powerHp>
+								<powerRpm>5000</powerRpm>
+								<powerRpmLow>5000</powerRpmLow>
+								<maxspeed>132</maxspeed>
+								<acceleration>13.4</acceleration>
+								<tankVolume>34</tankVolume>
+								<yearstart>1992</yearstart>
+								<yearstop>2000</yearstop>
+								<coupe>Hatchback</coupe>
+								<places>5</places>
+								<placesMin>5</placesMin>
+								<length>3050</length>
+								<width>1410</width>
+								<height>1350</height>
+								<wheelbase>2035</wheelbase>
+								<luggageMin>120</luggageMin>
+								<luggageMinMin>120</luggageMinMin>
+								<engineCode>12A2EK72</engineCode>
+								<engineposition>Ön, enine</engineposition>
+								<engineDisplacement>1274</engineDisplacement>
+								<torque>89/2600</torque>
+								<torqueNm>89</torqueNm>
+								<torqueRpm>2600</torqueRpm>
+								<fuelSystem>Tek noktadan enjeksiyon</fuelSystem>
+								<turbine>Atmosferik motor</turbine>
+								<positioncilinders>Sıralı</positioncilinders>
+								<cilinders>4</cilinders>
+								<bore>70.6</bore>
+								<stroke>81.33</stroke>
+								<compressionRatio>10.5</compressionRatio>
+								<valvesPerCilinder>2</valvesPerCilinder>
+								<fuel>Benzin</fuel>
+								<drive>Önden çekiş</drive>
+								<gearboxAT>4</gearboxAT>
+								<frontSuspension>Salıncak</frontSuspension>
+								<rearSuspension>Sürükleme</rearSuspension>
+								<frontBrakes>Disk</frontBrakes>
+								<rearBrakes>Kampana</rearBrakes>
+								<abs>1</abs>
+								<steeringType>Direksiyon kutusu</steeringType>
+								<fuelConsumptionCombined>7.1</fuelConsumptionCombined>
+								<curbWeight>645</curbWeight>
+								<maxWeight>1000</maxWeight>
+							</modification>
+							<modification>
+								<id>11554</id>
+								<brand>Rover</brand>
+								<model>Mini MK</model>
+								<generation>Mini MK I</generation>
+								<engine>1300 (63 bg)</engine>
+								<powertrain>İçten yanmalı motor</powertrain>
+								<doors>3</doors>
+								<doorsMin>3</doorsMin>
+								<power>63/5700</power>
+								<powerHp>63</powerHp>
+								<powerRpm>5700</powerRpm>
+								<maxspeed>148</maxspeed>
+								<acceleration>12.7</acceleration>
+								<tankVolume>34</tankVolume>
+								<yearstart>1996</yearstart>
+								<yearstop>2000</yearstop>
+								<coupe>Hatchback</coupe>
+								<places>5</places>
+								<length>3100</length>
+								<width>1440</width>
+								<height>1350</height>
+								<wheelbase>2035</wheelbase>
+								<luggageMin>120</luggageMin>
+								<engineCode>12A2LK70</engineCode>
+								<engineposition>Ön, enine</engineposition>
+								<engineDisplacement>1273</engineDisplacement>
+								<torqueNm>95</torqueNm>
+								<fuelSystem>Çok noktalı enjeksiyon</fuelSystem>
+								<turbine>Atmosferik motor</turbine>
+								<positioncilinders>Sıralı</positioncilinders>
+								<cilinders>4</cilinders>
+								<bore>70.6</bore>
+								<stroke>81.3</stroke>
+								<compressionRatio>10.1</compressionRatio>
+								<valvesPerCilinder>2</valvesPerCilinder>
+								<fuel>Benzin</fuel>
+								<drive>Önden çekiş</drive>
+								<gearboxMT>4</gearboxMT>
+								<frontBrakes>Disk</frontBrakes>
+								<rearBrakes>Kampana</rearBrakes>
+								<abs>1</abs>
+								<fuelConsumptionUrban>8.5</fuelConsumptionUrban>
+								<fuelConsumptionExtraurban>5.5</fuelConsumptionExtraurban>
+								<curbWeight>700</curbWeight>
+								<maxWeight>1050</maxWeight>
+							</modification>
+						</modifications>
+					</generation>
+				</generations>
+			</model>
+		</models>
+	</brand>
+	<brand>
+		<update>2022-04-14 16:44:04</update>
+		<name>Hummer</name>
+		<id>137</id>
+		<models>
+			<model>
+				<update>2021-01-27 12:02:58</update>
+				<name>H2</name>
+				<id>1360</id>
+				<generations>
+					<generation>
+						<prototype>0</prototype>
+						<update>2021-01-05 21:49:32</update>
+						<name>H2 SUT</name>
+						<modelYear>2005</modelYear>
+						<id>2719</id>
+						<modifications>
+							<modification>
+								<id>16668</id>
+								<brand>Hummer</brand>
+								<model>H2</model>
+								<generation>H2 SUT</generation>
+								<engine>6.2i V8 (398 bg) 4x4 Automatic</engine>
+								<powertrain>İçten yanmalı motor</powertrain>
+								<doors>4</doors>
+								<power>398/5700</power>
+								<powerHp>398</powerHp>
+								<powerRpm>5700</powerRpm>
+								<maxspeed>158</maxspeed>
+								<tankVolume>121</tankVolume>
+								<yearstart>2007</yearstart>
+								<yearstop>2009</yearstop>
+								<coupe>Off-road araç, Pick-up</coupe>
+								<places>4</places>
+								<length>5170</length>
+								<width>2063</width>
+								<height>2012</height>
+								<wheelbase>3118</wheelbase>
+								<engineCode>L92</engineCode>
+								<engineposition>Ön, boyuna</engineposition>
+								<engineDisplacement>6162</engineDisplacement>
+								<torqueNm>563</torqueNm>
+								<fuelSystem>Çok noktalı enjeksiyon</fuelSystem>
+								<turbine>Atmosferik motor</turbine>
+								<valvetrain>OHV,VVT</valvetrain>
+								<positioncilinders>V motor</positioncilinders>
+								<cilinders>8</cilinders>
+								<bore>103.25</bore>
+								<stroke>92</stroke>
+								<compressionRatio>10.5</compressionRatio>
+								<valvesPerCilinder>2</valvesPerCilinder>
+								<fuel>Benzin</fuel>
+								<drive>Tüm tekerlekten çekiş (4x4)</drive>
+								<gearboxAT>6</gearboxAT>
+								<frontSuspension>Bükülme</frontSuspension>
+								<rearSuspension>Katı aks süspansiyon</rearSuspension>
+								<frontBrakes>Hava soğutmalı diskler</frontBrakes>
+								<rearBrakes>Hava soğutmalı diskler</rearBrakes>
+								<abs>1</abs>
+								<fuelConsumptionCombined>20</fuelConsumptionCombined>
+								<curbWeight>3017</curbWeight>
+								<maxWeight>3901</maxWeight>
+							</modification>
+							<modification>
+								<id>12492</id>
+								<brand>Hummer</brand>
+								<model>H2</model>
+								<generation>H2 SUT</generation>
+								<engine>6.0i V8 (329 bg) 4x4 Automatic</engine>
+								<powertrain>İçten yanmalı motor</powertrain>
+								<doors>4</doors>
+								<power>329/5200</power>
+								<powerHp>329</powerHp>
+								<maxspeed>158</maxspeed>
+								<tankVolume>121</tankVolume>
+								<yearstart>2004</yearstart>
+								<yearstop>2007</yearstop>
+								<coupe>Off-road araç, Pick-up</coupe>
+								<places>4</places>
+								<length>5170</length>
+								<width>2063</width>
+								<height>2080</height>
+								<wheelbase>3118</wheelbase>
+								<engineCode>LQ4</engineCode>
+								<engineposition>Ön, boyuna</engineposition>
+								<engineDisplacement>5967</engineDisplacement>
+								<torqueNm>494</torqueNm>
+								<fuelSystem>Çok noktalı enjeksiyon</fuelSystem>
+								<turbine>Atmosferik motor</turbine>
+								<valvetrain>OHV</valvetrain>
+								<positioncilinders>V motor</positioncilinders>
+								<cilinders>8</cilinders>
+								<fuel>Benzin</fuel>
+								<drive>Tüm tekerlekten çekiş (4x4)</drive>
+								<gearboxAT>4</gearboxAT>
+								<frontBrakes>Hava soğutmalı diskler</frontBrakes>
+								<rearBrakes>Hava soğutmalı diskler</rearBrakes>
+								<abs>1</abs>
+								<fuelConsumptionCombined>22</fuelConsumptionCombined>
+								<curbWeight>2909</curbWeight>
+								<maxWeight>3901</maxWeight>
+							</modification>
+						</modifications>
+					</generation>
+					<generation>
+						<prototype>0</prototype>
+						<update>2021-01-05 21:49:32</update>
+						<name>H2 (gmt 840)</name>
+						<modelYear>2003</modelYear>
+						<id>2721</id>
+						<modifications>
+							<modification>
+								<id>12495</id>
+								<brand>Hummer</brand>
+								<model>H2</model>
+								<generation>H2 (gmt 840)</generation>
+								<engine>6.2i V8 (398 bg) 4x4 Automatic</engine>
+								<powertrain>İçten yanmalı motor</powertrain>
+								<doors>5</doors>
+								<power>398/5700</power>
+								<powerHp>398</powerHp>
+								<acceleration>7.8</acceleration>
+								<maxspeed>158</maxspeed>
+								<tankVolume>121</tankVolume>
+								<yearstart>2007</yearstart>
+								<yearstop>2009</yearstop>
+								<coupe>Off-road araç, SUV</coupe>
+								<places>5</places>
+								<length>4820</length>
+								<width>2063</width>
+								<height>1993</height>
+								<wheelbase>3118</wheelbase>
+								<engineCode>L92</engineCode>
+								<engineDisplacement>6162</engineDisplacement>
+								<torqueNm>574</torqueNm>
+								<fuel>Benzin</fuel>
+								<drive>Tüm tekerlekten çekiş (4x4)</drive>
+								<gearboxAT>6</gearboxAT>
+								<abs>1</abs>
+								<fuelConsumptionCombined>18.1</fuelConsumptionCombined>
+								<curbWeight>3017</curbWeight>
+								<maxWeight>3900</maxWeight>
+							</modification>
+						</modifications>
+					</generation>
+				</generations>
+			</model>
+			<model>
+				<update>2020-12-03 15:11:46</update>
+				<name>H3</name>
+				<id>2236</id>
+				<generations>
+					<generation>
+						<prototype>0</prototype>
+						<name>H3</name>
+						<modelYear>2006</modelYear>
+						<id>5530</id>
+						<modifications>
+							<modification>
+								<id>29818</id>
+								<brand>Hummer</brand>
+								<model>H3</model>
+								<generation>H3</generation>
+								<engine>3.7i 20V (245 bg) 4x4 Automatic</engine>
+								<powertrain>İçten yanmalı motor</powertrain>
+								<doors>5</doors>
+								<power>245/5600</power>
+								<powerHp>245</powerHp>
+								<maxspeed>158</maxspeed>
+								<tankVolume>87</tankVolume>
+								<yearstart>2006</yearstart>
+								<yearstop>2009</yearstop>
+								<coupe>Off-road araç, SUV</coupe>
+								<places>5</places>
+								<length>4742</length>
+								<width>1897</width>
+								<height>1872</height>
+								<wheelbase>2842</wheelbase>
+								<engineDisplacement>3653</engineDisplacement>
+								<torqueNm>328</torqueNm>
+								<fuel>Benzin</fuel>
+								<drive>Tüm tekerlekten çekiş (4x4)</drive>
+								<gearboxAT>4</gearboxAT>
+								<abs>1</abs>
+								<fuelConsumptionCombined>13.8</fuelConsumptionCombined>
+								<curbWeight>2132</curbWeight>
+								<maxWeight>2654</maxWeight>
+							</modification>
+						</modifications>
+					</generation>
+				</generations>
+			</model>
+		</models>
+	</brand>
+</brands>
