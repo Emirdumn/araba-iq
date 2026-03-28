@@ -2,6 +2,7 @@
   "common": {
     "brand": "ArabaIQ",
     "home": "Ana sayfa",
+    "navGarage": "Garajım",
     "navRecommendations": "Öneriler",
     "navCompare": "Karşılaştır",
     "menu": "Menü",
@@ -9,10 +10,10 @@
     "loading": "Yükleniyor..."
   },
   "home": {
-    "hero_title": "Aracını net seç",
-    "hero_subtitle": "Veriye dayalı kişisel öneriler ve şeffaf yan yana karşılaştırma.",
-    "hero_cta_primary": "Önerileri al",
-    "hero_cta_secondary": "Araçları karşılaştır"
+    "hero_title": "Aracını Akıllıca Seç",
+    "hero_subtitle": "Araçları ekle, karşılaştır, doğru kararı ver.",
+    "hero_cta_primary": "Karşılaştırmaya Başla",
+    "hero_cta_secondary": "Araç Ekle"
   },
   "footer": {
     "tagline": "Araç karşılaştırma ve öneri platformu.",

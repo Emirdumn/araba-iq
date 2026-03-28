@@ -2,6 +2,7 @@
   "common": {
     "brand": "ArabaIQ",
     "home": "Home",
+    "navGarage": "My Cars",
     "navRecommendations": "Recommendations",
     "navCompare": "Compare",
     "menu": "Menu",
@@ -9,10 +10,10 @@
     "loading": "Loading..."
   },
   "home": {
-    "hero_title": "Choose your next car with clarity",
-    "hero_subtitle": "Personalized recommendations and transparent side-by-side comparison powered by data.",
-    "hero_cta_primary": "Get recommendations",
-    "hero_cta_secondary": "Compare cars"
+    "hero_title": "Choose Your Car with Clarity",
+    "hero_subtitle": "Add cars, compare side by side, decide with confidence.",
+    "hero_cta_primary": "Start Comparing",
+    "hero_cta_secondary": "Add a Car"
   },
   "footer": {
     "tagline": "Car comparison & recommendation platform.",

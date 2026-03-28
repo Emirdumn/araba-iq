@@ -89,4 +89,69 @@ export async function fetchSegments(): Promise<SegmentItem[]> {
   return data as SegmentItem[];
 }
 
+// ── Garage CRUD ──
+
+export interface GarageCar {
+  id: number;
+  brand: string;
+  model: string;
+  variant: string | null;
+  year: number;
+  price: number | null;
+  mileage_km: number | null;
+  listing_url: string | null;
+  fuel_type: string | null;
+  transmission: string | null;
+  body_type: string | null;
+  segment: string | null;
+  horsepower: number | null;
+  engine_cc: number | null;
+  combined_fuel_consumption: number | null;
+  luggage_capacity: number | null;
+  equipment: string | null;
+  notes: string | null;
+  is_favorite: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export type GarageCarInput = Omit<GarageCar, "id" | "created_at" | "updated_at">;
+
+export async function fetchGarageCars(): Promise<GarageCar[]> {
+  const res = await fetch(`${ARABAIQ_BASE}/garage`);
+  const data = (await parseJsonResponse(res)) as { detail?: unknown };
+  if (!res.ok) throw new Error(formatFastApiDetail(data?.detail) || `HTTP ${res.status}`);
+  return data as GarageCar[];
+}
+
+export async function createGarageCar(body: Partial<GarageCarInput>): Promise<GarageCar> {
+  const res = await fetch(`${ARABAIQ_BASE}/garage`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  const data = (await parseJsonResponse(res)) as { detail?: unknown };
+  if (!res.ok) throw new Error(formatFastApiDetail(data?.detail) || `HTTP ${res.status}`);
+  return data as GarageCar;
+}
+
+export async function updateGarageCar(id: number, body: Partial<GarageCarInput>): Promise<GarageCar> {
+  const res = await fetch(`${ARABAIQ_BASE}/garage/${id}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  const data = (await parseJsonResponse(res)) as { detail?: unknown };
+  if (!res.ok) throw new Error(formatFastApiDetail(data?.detail) || `HTTP ${res.status}`);
+  return data as GarageCar;
+}
+
+export async function deleteGarageCar(id: number): Promise<void> {
+  const res = await fetch(`${ARABAIQ_BASE}/garage/${id}`, { method: "DELETE" });
+  if (!res.ok) {
+    const data = (await parseJsonResponse(res)) as { detail?: unknown };
+    throw new Error(formatFastApiDetail(data?.detail) || `HTTP ${res.status}`);
+  }
+}
+
 export { ARABAIQ_BASE };

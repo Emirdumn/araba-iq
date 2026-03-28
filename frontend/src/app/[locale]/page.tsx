@@ -49,14 +49,14 @@ export default async function HomePage({ params }: Props) {
         {/* CTA Buttons */}
         <div className="opacity-0 animate-fade-in-delay flex flex-col sm:flex-row gap-4 justify-center pt-4">
           <Link
-            href={`/${locale}/recommendations`}
+            href={`/${locale}/garage`}
             className="btn-gradient inline-flex items-center justify-center gap-2 rounded-xl px-8 py-4 text-white font-semibold text-base"
           >
             {h.hero_cta_primary}
             <ArrowRight className="w-4 h-4" />
           </Link>
           <Link
-            href={`/${locale}/compare`}
+            href={`/${locale}/garage/add`}
             className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/[0.12] bg-white/[0.04] backdrop-blur-sm px-8 py-4 text-[#E5E7EB] font-semibold text-base hover:bg-white/[0.08] hover:border-white/[0.2] transition-all duration-300"
           >
             {h.hero_cta_secondary}
