@@ -9,13 +9,21 @@ import {
 } from "@/lib/araba-iq-client";
 
 const MAX_COMPARE = 4;
+const PAGE_SIZE = 30;
 
 interface GarageState {
   cars: GarageCar[];
+  total: number;
   loading: boolean;
+  loadingMore: boolean;
+  search: string;
   selectedIds: Set<number>;
 
-  load: () => Promise<void>;
+  load: (search?: string) => Promise<void>;
+  loadMore: () => Promise<void>;
+  hasMore: () => boolean;
+  setSearch: (q: string) => void;
+
   addCar: (input: Partial<GarageCarInput>) => Promise<GarageCar>;
   editCar: (id: number, input: Partial<GarageCarInput>) => Promise<GarageCar>;
   removeCar: (id: number) => Promise<void>;
@@ -29,24 +37,50 @@ interface GarageState {
 
 export const useGarageStore = create<GarageState>()((set, get) => ({
   cars: [],
+  total: 0,
   loading: false,
+  loadingMore: false,
+  search: "",
   selectedIds: new Set(),
 
-  load: async () => {
-    set({ loading: true });
+  load: async (search) => {
+    const q = search ?? get().search;
+    set({ loading: true, search: q });
     try {
-      const cars = await fetchGarageCars();
-      set({ cars });
+      const res = await fetchGarageCars({ limit: PAGE_SIZE, offset: 0, search: q || undefined });
+      set({ cars: res.items, total: res.total });
     } catch {
-      set({ cars: [] });
+      set({ cars: [], total: 0 });
     } finally {
       set({ loading: false });
     }
   },
 
+  loadMore: async () => {
+    const { cars, total, search, loadingMore } = get();
+    if (loadingMore || cars.length >= total) return;
+    set({ loadingMore: true });
+    try {
+      const res = await fetchGarageCars({ limit: PAGE_SIZE, offset: cars.length, search: search || undefined });
+      set((s) => ({ cars: [...s.cars, ...res.items], total: res.total }));
+    } finally {
+      set({ loadingMore: false });
+    }
+  },
+
+  hasMore: () => {
+    const { cars, total } = get();
+    return cars.length < total;
+  },
+
+  setSearch: (q) => {
+    set({ search: q });
+    get().load(q);
+  },
+
   addCar: async (input) => {
     const car = await createGarageCar(input);
-    set((s) => ({ cars: [car, ...s.cars] }));
+    set((s) => ({ cars: [car, ...s.cars], total: s.total + 1 }));
     return car;
   },
 
@@ -61,7 +95,7 @@ export const useGarageStore = create<GarageState>()((set, get) => ({
     set((s) => {
       const next = new Set(s.selectedIds);
       next.delete(id);
-      return { cars: s.cars.filter((c) => c.id !== id), selectedIds: next };
+      return { cars: s.cars.filter((c) => c.id !== id), selectedIds: next, total: s.total - 1 };
     });
   },
 

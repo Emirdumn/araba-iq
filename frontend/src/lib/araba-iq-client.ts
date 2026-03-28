@@ -117,11 +117,25 @@ export interface GarageCar {
 
 export type GarageCarInput = Omit<GarageCar, "id" | "created_at" | "updated_at">;
 
-export async function fetchGarageCars(): Promise<GarageCar[]> {
-  const res = await fetch(`${ARABAIQ_BASE}/garage`);
+export interface GarageListResponse {
+  items: GarageCar[];
+  total: number;
+  limit: number;
+  offset: number;
+}
+
+export async function fetchGarageCars(
+  opts: { limit?: number; offset?: number; search?: string } = {}
+): Promise<GarageListResponse> {
+  const params = new URLSearchParams();
+  if (opts.limit) params.set("limit", String(opts.limit));
+  if (opts.offset) params.set("offset", String(opts.offset));
+  if (opts.search) params.set("search", opts.search);
+  const qs = params.toString();
+  const res = await fetch(`${ARABAIQ_BASE}/garage${qs ? `?${qs}` : ""}`);
   const data = (await parseJsonResponse(res)) as { detail?: unknown };
   if (!res.ok) throw new Error(formatFastApiDetail(data?.detail) || `HTTP ${res.status}`);
-  return data as GarageCar[];
+  return data as GarageListResponse;
 }
 
 export async function createGarageCar(body: Partial<GarageCarInput>): Promise<GarageCar> {

@@ -1,5 +1,7 @@
-from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy import select
+from typing import Optional
+
+from fastapi import APIRouter, Depends, HTTPException, Query
+from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from app.core.database import get_db
@@ -9,10 +11,28 @@ from app.schemas.garage import GarageCarCreate, GarageCarRead, GarageCarUpdate
 router = APIRouter(prefix="/garage", tags=["garage"])
 
 
-@router.get("", response_model=list[GarageCarRead])
-def list_garage_cars(db: Session = Depends(get_db)) -> list[GarageCar]:
-    stmt = select(GarageCar).order_by(GarageCar.updated_at.desc())
-    return list(db.scalars(stmt).all())
+@router.get("")
+def list_garage_cars(
+    db: Session = Depends(get_db),
+    limit: int = Query(50, ge=1, le=200),
+    offset: int = Query(0, ge=0),
+    search: Optional[str] = Query(None, max_length=100),
+) -> dict:
+    base = select(GarageCar)
+    if search:
+        like = f"%{search}%"
+        base = base.where(
+            GarageCar.brand.ilike(like) | GarageCar.model.ilike(like)
+        )
+    total = db.scalar(select(func.count()).select_from(base.subquery()))
+    stmt = base.order_by(GarageCar.updated_at.desc()).offset(offset).limit(limit)
+    cars = list(db.scalars(stmt).all())
+    return {
+        "items": [GarageCarRead.model_validate(c) for c in cars],
+        "total": total,
+        "limit": limit,
+        "offset": offset,
+    }
 
 
 @router.post("", response_model=GarageCarRead, status_code=201)
