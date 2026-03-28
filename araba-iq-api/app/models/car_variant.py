@@ -33,6 +33,9 @@ class CarVariant(Base):
     market_stat: Mapped[Optional["MarketStat"]] = relationship(
         "MarketStat", back_populates="car_variant", uselist=False
     )
+    price_histories: Mapped[list["PriceHistory"]] = relationship(
+        back_populates="car_variant", cascade="all, delete-orphan"
+    )
     features: Mapped[list["CarFeature"]] = relationship(
         back_populates="car_variant", cascade="all, delete-orphan"
     )

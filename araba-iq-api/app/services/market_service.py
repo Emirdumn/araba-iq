@@ -8,6 +8,7 @@ from sqlalchemy.orm import Session
 
 from app.models.market_listing import MarketListing
 from app.models.market_stat import MarketStat
+from app.models.price_history import PriceHistory
 from app.utils.stats import mean, median, pearson_price_mileage, pstdev, pvariance
 
 
@@ -81,6 +82,19 @@ def upsert_market_stat(db: Session, car_variant_id: int, listings: list[MarketLi
             calculated_at=now,
         )
         db.add(row)
+        
+        # Record history for new stat
+        history_row = PriceHistory(
+            car_variant_id=car_variant_id,
+            avg_price=agg["avg_price"],
+            median_price=agg["median_price"],
+            min_price=agg["min_price"],
+            max_price=agg["max_price"],
+            sample_size=agg["sample_size"],
+            recorded_at=now,
+        )
+        db.add(history_row)
+        
         return row
     existing.sample_size = agg["sample_size"]
     existing.avg_price = agg["avg_price"]
@@ -92,6 +106,19 @@ def upsert_market_stat(db: Session, car_variant_id: int, listings: list[MarketLi
     existing.avg_mileage = agg["avg_mileage"]
     existing.price_mileage_corr = agg["price_mileage_corr"]
     existing.calculated_at = now
+    
+    # Also record history
+    history_row = PriceHistory(
+        car_variant_id=car_variant_id,
+        avg_price=agg["avg_price"],
+        median_price=agg["median_price"],
+        min_price=agg["min_price"],
+        max_price=agg["max_price"],
+        sample_size=agg["sample_size"],
+        recorded_at=now,
+    )
+    db.add(history_row)
+
     return existing
 
 

@@ -9,7 +9,7 @@ services:
       POSTGRES_USER: araba_iq
       POSTGRES_PASSWORD: ${ARABA_IQ_DB_PASSWORD:-changeme}
     ports:
-      - "5433:5432"
+      - "5435:5432"
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U araba_iq -d araba_iq"]
       interval: 5s
@@ -21,7 +21,7 @@ services:
       context: ./araba-iq-api
       dockerfile: Dockerfile
     ports:
-      - "8100:8100"
+      - "8101:8100"
     environment:
       DATABASE_URL: "postgresql://araba_iq:${ARABA_IQ_DB_PASSWORD:-changeme}@araba-iq-db:5432/araba_iq"
       CORS_ORIGINS: "http://localhost:3000,http://127.0.0.1:3000,http://arabaiq.com,https://arabaiq.com,http://www.arabaiq.com,https://www.arabaiq.com"
@@ -38,7 +38,7 @@ services:
       context: ./frontend
       dockerfile: Dockerfile.dev
     ports:
-      - "3000:3000"
+      - "3002:3000"
     environment:
       NEXT_PUBLIC_ARABAIQ_API_URL: "https://arabaiq.com/api/v1"
     volumes:
