@@ -47,8 +47,8 @@ export default function Header({ messages }: HeaderProps) {
 
   const navLinks = [
     { href: `/${locale}`, label: messages.home },
+    { href: `/${locale}/compare`, label: locale === "tr" ? "Karşılaştır" : "Compare" },
     { href: `/${locale}/garage`, label: messages.navGarage || (locale === "tr" ? "Garajım" : "My Cars") },
-    { href: `/${locale}/garage/add`, label: locale === "tr" ? "Araç Ekle" : "Add Car" },
   ];
 
   return (

@@ -161,7 +161,7 @@ export default function GaragePage() {
               </span>
             </div>
             <Link
-              href={`/${locale}/garage/compare`}
+              href={`/${locale}/compare`}
               className={`inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold transition-all duration-200 ${
                 count >= 2
                   ? "btn-gradient text-white"

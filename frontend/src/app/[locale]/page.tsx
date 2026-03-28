@@ -46,18 +46,17 @@ export default async function HomePage({ params }: Props) {
 
         <div className="opacity-0 animate-fade-in-delay flex flex-col sm:flex-row gap-3 justify-center pt-4">
           <Link
-            href={`/${locale}/garage`}
+            href={`/${locale}/compare`}
             className="btn-gradient inline-flex items-center justify-center gap-2 rounded-xl px-8 py-4 text-white font-semibold text-base"
           >
-            {isTr ? "Garaja Git" : "Open Garage"}
+            {isTr ? "Araç Karşılaştır" : "Compare Cars"}
             <ArrowRight className="w-4 h-4" />
           </Link>
           <Link
-            href={`/${locale}/garage/add`}
+            href={`/${locale}/garage`}
             className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/[0.1] bg-white/[0.04] px-8 py-4 text-[#E5E7EB] font-semibold text-base hover:bg-white/[0.07] hover:border-white/[0.18] transition-all duration-300"
           >
-            <Plus className="w-4 h-4" />
-            {isTr ? "Araç Ekle" : "Add Car"}
+            {isTr ? "Garajım" : "My Garage"}
           </Link>
         </div>
 
