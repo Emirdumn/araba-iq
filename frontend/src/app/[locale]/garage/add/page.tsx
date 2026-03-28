@@ -2,101 +2,76 @@
 
 import { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { Loader2 } from "lucide-react";
-import { createGarageCar } from "@/lib/araba-iq-client";
+import { ArrowLeft, Loader2, Save } from "lucide-react";
+import Link from "next/link";
+import { useGarageStore } from "@/stores/garage";
 
-const EQUIPMENT_OPTIONS = [
-  "apple_carplay", "android_auto", "adaptive_cruise_control", "lane_keep_assist",
-  "blind_spot_warning", "sunroof", "panoramic_roof", "rear_camera",
-  "head_up_display", "automatic_park_assistant", "led_headlights",
+const EQUIPMENT = [
+  { slug: "apple_carplay", label: "Apple CarPlay" },
+  { slug: "android_auto", label: "Android Auto" },
+  { slug: "rear_camera", label: "Geri Kamera" },
+  { slug: "sunroof", label: "Sunroof" },
+  { slug: "panoramic_roof", label: "Panoramik Tavan" },
+  { slug: "adaptive_cruise_control", label: "Adaptif Cruise" },
+  { slug: "lane_keep_assist", label: "Şerit Takip" },
+  { slug: "blind_spot_warning", label: "Kör Nokta" },
+  { slug: "head_up_display", label: "Head-up Display" },
+  { slug: "led_headlights", label: "LED Far" },
 ];
-
-const EQUIPMENT_LABELS: Record<string, string> = {
-  apple_carplay: "Apple CarPlay",
-  android_auto: "Android Auto",
-  adaptive_cruise_control: "Adaptif Cruise",
-  lane_keep_assist: "Şerit Takip",
-  blind_spot_warning: "Kör Nokta",
-  sunroof: "Sunroof",
-  panoramic_roof: "Panoramik Tavan",
-  rear_camera: "Geri Kamera",
-  head_up_display: "Head-up Display",
-  automatic_park_assistant: "Otopark",
-  led_headlights: "LED Far",
-};
-
-interface FormData {
-  brand: string;
-  model: string;
-  variant: string;
-  year: string;
-  price: string;
-  mileage_km: string;
-  listing_url: string;
-  fuel_type: string;
-  transmission: string;
-  body_type: string;
-  segment: string;
-  horsepower: string;
-  engine_cc: string;
-  combined_fuel_consumption: string;
-  luggage_capacity: string;
-  notes: string;
-  equipment: string[];
-}
-
-const initialForm: FormData = {
-  brand: "", model: "", variant: "", year: "2024", price: "", mileage_km: "",
-  listing_url: "", fuel_type: "", transmission: "", body_type: "", segment: "",
-  horsepower: "", engine_cc: "", combined_fuel_consumption: "", luggage_capacity: "",
-  notes: "", equipment: [],
-};
 
 export default function AddCarPage() {
   const params = useParams();
   const router = useRouter();
   const locale = (params?.locale as string) || "tr";
-  const [form, setForm] = useState<FormData>(initialForm);
+  const isTr = locale === "tr";
+  const addCar = useGarageStore((s) => s.addCar);
+
+  const [brand, setBrand] = useState("");
+  const [model, setModel] = useState("");
+  const [variant, setVariant] = useState("");
+  const [year, setYear] = useState("2024");
+  const [price, setPrice] = useState("");
+  const [fuelType, setFuelType] = useState("");
+  const [transmission, setTransmission] = useState("");
+  const [horsepower, setHorsepower] = useState("");
+  const [consumption, setConsumption] = useState("");
+  const [bodyType, setBodyType] = useState("");
+  const [equipment, setEquipment] = useState<string[]>([]);
+  const [notes, setNotes] = useState("");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const set = (patch: Partial<FormData>) => setForm((f) => ({ ...f, ...patch }));
+  const toggleEquip = (slug: string) =>
+    setEquipment((prev) =>
+      prev.includes(slug) ? prev.filter((s) => s !== slug) : [...prev, slug]
+    );
 
-  const toggleEquip = (slug: string) => {
-    setForm((f) => ({
-      ...f,
-      equipment: f.equipment.includes(slug)
-        ? f.equipment.filter((s) => s !== slug)
-        : [...f.equipment, slug],
-    }));
-  };
-
-  const handleSubmit = async () => {
-    if (!form.brand.trim() || !form.model.trim()) {
-      setError(locale === "tr" ? "Marka ve model zorunludur." : "Brand and model are required.");
+  const handleSave = async () => {
+    if (!brand.trim() || !model.trim()) {
+      setError(isTr ? "Marka ve model zorunlu." : "Brand and model required.");
       return;
     }
     setSaving(true);
     setError(null);
     try {
-      await createGarageCar({
-        brand: form.brand.trim(),
-        model: form.model.trim(),
-        variant: form.variant.trim() || null,
-        year: Number(form.year) || 2024,
-        price: form.price ? Number(form.price) : null,
-        mileage_km: form.mileage_km ? Number(form.mileage_km) : null,
-        listing_url: form.listing_url.trim() || null,
-        fuel_type: form.fuel_type || null,
-        transmission: form.transmission || null,
-        body_type: form.body_type || null,
-        segment: form.segment || null,
-        horsepower: form.horsepower ? Number(form.horsepower) : null,
-        engine_cc: form.engine_cc ? Number(form.engine_cc) : null,
-        combined_fuel_consumption: form.combined_fuel_consumption ? Number(form.combined_fuel_consumption) : null,
-        luggage_capacity: form.luggage_capacity ? Number(form.luggage_capacity) : null,
-        equipment: form.equipment.length > 0 ? form.equipment.join(",") : null,
-        notes: form.notes.trim() || null,
+      await addCar({
+        brand: brand.trim(),
+        model: model.trim(),
+        variant: variant.trim() || null,
+        year: Number(year) || 2024,
+        price: price ? Number(price) : null,
+        fuel_type: fuelType || null,
+        transmission: transmission || null,
+        body_type: bodyType || null,
+        horsepower: horsepower ? Number(horsepower) : null,
+        combined_fuel_consumption: consumption ? Number(consumption) : null,
+        equipment: equipment.length > 0 ? equipment.join(",") : null,
+        notes: notes.trim() || null,
+        mileage_km: null,
+        listing_url: null,
+        segment: null,
+        engine_cc: null,
+        luggage_capacity: null,
         is_favorite: false,
       });
       router.push(`/${locale}/garage`);
@@ -107,147 +82,99 @@ export default function AddCarPage() {
     }
   };
 
-  const inputCls = "mt-1 w-full rounded-xl border border-white/[0.08] bg-white/[0.04] px-3 py-2.5 text-[#E5E7EB] placeholder:text-[#475569] focus:border-primary-500/50 focus:ring-2 focus:ring-primary-500/20 focus:outline-none transition-all hover:border-white/[0.15]";
-  const labelCls = "text-[#9CA3AF] text-sm";
+  const inputCls =
+    "w-full rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-3.5 text-[15px] text-white placeholder:text-[#475569] focus:border-primary-500/50 focus:ring-1 focus:ring-primary-500/20 focus:outline-none transition-all hover:border-white/[0.12]";
 
   return (
-    <div className="min-h-screen pt-24 pb-16">
-      <div className="max-w-2xl mx-auto px-4 sm:px-6">
-        <h1 className="text-3xl font-extrabold text-white font-display mb-2">
-          {locale === "tr" ? "Araç Ekle" : "Add Car"}
+    <div className="min-h-screen pt-20 pb-16">
+      <div className="max-w-lg mx-auto px-4">
+        {/* Back */}
+        <Link
+          href={`/${locale}/garage`}
+          className="inline-flex items-center gap-1.5 text-sm text-[#6B7280] hover:text-white transition-colors mb-6"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          {isTr ? "Garaja dön" : "Back to garage"}
+        </Link>
+
+        <h1 className="text-2xl font-bold text-white font-display mb-8">
+          {isTr ? "Araç Ekle" : "Add Car"}
         </h1>
-        <p className="text-sm text-[#9CA3AF] mb-8">
-          {locale === "tr" ? "Bilgileri doldur, garajına kaydet." : "Fill in the details and save to your garage."}
-        </p>
 
         {error && (
-          <div className="mb-4 rounded-xl border border-red-500/20 bg-red-500/[0.06] px-4 py-3 text-sm text-red-300">
+          <div className="mb-6 rounded-xl border border-red-500/20 bg-red-500/[0.06] px-4 py-3 text-sm text-red-300">
             {error}
           </div>
         )}
 
-        <div className="space-y-6">
-          {/* Basics */}
-          <section className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6">
-            <h2 className="text-lg font-semibold text-white mb-4">
-              {locale === "tr" ? "Temel Bilgiler" : "Basic Info"}
+        <div className="space-y-8">
+          {/* Group 1: Identity */}
+          <section className="space-y-3">
+            <h2 className="text-xs font-semibold uppercase tracking-wider text-[#6B7280] mb-1">
+              {isTr ? "Araç Bilgisi" : "Car Identity"}
             </h2>
-            <div className="grid gap-4 sm:grid-cols-2">
-              <label className="block"><span className={labelCls}>{locale === "tr" ? "Marka *" : "Brand *"}</span>
-                <input value={form.brand} onChange={(e) => set({ brand: e.target.value })} placeholder="BMW, Toyota..." className={inputCls} />
-              </label>
-              <label className="block"><span className={labelCls}>{locale === "tr" ? "Model *" : "Model *"}</span>
-                <input value={form.model} onChange={(e) => set({ model: e.target.value })} placeholder="320i, Corolla..." className={inputCls} />
-              </label>
-              <label className="block"><span className={labelCls}>{locale === "tr" ? "Paket / Versiyon" : "Variant / Trim"}</span>
-                <input value={form.variant} onChange={(e) => set({ variant: e.target.value })} placeholder="Sport Line, Elegance..." className={inputCls} />
-              </label>
-              <label className="block"><span className={labelCls}>{locale === "tr" ? "Yıl" : "Year"}</span>
-                <input type="number" value={form.year} onChange={(e) => set({ year: e.target.value })} className={inputCls} />
-              </label>
+            <input value={brand} onChange={(e) => setBrand(e.target.value)} placeholder={isTr ? "Marka (BMW, Toyota...)" : "Brand"} className={inputCls} />
+            <input value={model} onChange={(e) => setModel(e.target.value)} placeholder={isTr ? "Model (320i, Corolla...)" : "Model"} className={inputCls} />
+            <input value={variant} onChange={(e) => setVariant(e.target.value)} placeholder={isTr ? "Paket (opsiyonel)" : "Trim (optional)"} className={inputCls} />
+            <div className="flex gap-3">
+              <input type="number" value={year} onChange={(e) => setYear(e.target.value)} placeholder="Yıl" className={inputCls + " flex-1"} />
+              <input type="number" value={price} onChange={(e) => setPrice(e.target.value)} placeholder={isTr ? "Fiyat (₺)" : "Price (₺)"} className={inputCls + " flex-[2]"} />
             </div>
           </section>
 
-          {/* Price & Status */}
-          <section className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6">
-            <h2 className="text-lg font-semibold text-white mb-4">
-              {locale === "tr" ? "Fiyat & Durum" : "Price & Status"}
+          {/* Group 2: Specs */}
+          <section className="space-y-3">
+            <h2 className="text-xs font-semibold uppercase tracking-wider text-[#6B7280] mb-1">
+              {isTr ? "Teknik" : "Specs"}
             </h2>
-            <div className="grid gap-4 sm:grid-cols-2">
-              <label className="block"><span className={labelCls}>{locale === "tr" ? "Fiyat (TL)" : "Price (TRY)"}</span>
-                <input type="number" value={form.price} onChange={(e) => set({ price: e.target.value })} placeholder="1450000" className={inputCls} />
-              </label>
-              <label className="block"><span className={labelCls}>KM</span>
-                <input type="number" value={form.mileage_km} onChange={(e) => set({ mileage_km: e.target.value })} placeholder="0" className={inputCls} />
-              </label>
-              <label className="block sm:col-span-2"><span className={labelCls}>{locale === "tr" ? "İlan Linki" : "Listing URL"}</span>
-                <input value={form.listing_url} onChange={(e) => set({ listing_url: e.target.value })} placeholder="https://..." className={inputCls} />
-              </label>
+            <div className="flex gap-3">
+              <select value={fuelType} onChange={(e) => setFuelType(e.target.value)} className={inputCls + " flex-1"}>
+                <option value="">{isTr ? "Yakıt" : "Fuel"}</option>
+                <option value="Benzin">Benzin</option>
+                <option value="Dizel">Dizel</option>
+                <option value="Hybrid">Hybrid</option>
+                <option value="Elektrik">Elektrik</option>
+              </select>
+              <select value={transmission} onChange={(e) => setTransmission(e.target.value)} className={inputCls + " flex-1"}>
+                <option value="">{isTr ? "Vites" : "Gear"}</option>
+                <option value="Otomatik">Otomatik</option>
+                <option value="Manuel">Manuel</option>
+              </select>
             </div>
+            <div className="flex gap-3">
+              <select value={bodyType} onChange={(e) => setBodyType(e.target.value)} className={inputCls + " flex-1"}>
+                <option value="">{isTr ? "Kasa" : "Body"}</option>
+                <option value="Sedan">Sedan</option>
+                <option value="SUV">SUV</option>
+                <option value="Hatchback">Hatchback</option>
+                <option value="Crossover">Crossover</option>
+                <option value="Station Wagon">Station Wagon</option>
+              </select>
+              <input type="number" value={horsepower} onChange={(e) => setHorsepower(e.target.value)} placeholder="HP" className={inputCls + " flex-1"} />
+            </div>
+            <input type="number" step="0.1" value={consumption} onChange={(e) => setConsumption(e.target.value)} placeholder={isTr ? "Tüketim (L/100km)" : "L/100km"} className={inputCls} />
           </section>
 
-          {/* Technical */}
-          <section className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6">
-            <h2 className="text-lg font-semibold text-white mb-4">
-              {locale === "tr" ? "Teknik" : "Technical"}
-            </h2>
-            <div className="grid gap-4 sm:grid-cols-2">
-              <label className="block"><span className={labelCls}>{locale === "tr" ? "Yakıt" : "Fuel"}</span>
-                <select value={form.fuel_type} onChange={(e) => set({ fuel_type: e.target.value })} className={inputCls}>
-                  <option value="">—</option>
-                  <option value="Benzin">Benzin</option>
-                  <option value="Dizel">Dizel</option>
-                  <option value="Hybrid">Hybrid</option>
-                  <option value="Elektrik">Elektrik</option>
-                  <option value="LPG">LPG</option>
-                </select>
-              </label>
-              <label className="block"><span className={labelCls}>{locale === "tr" ? "Vites" : "Transmission"}</span>
-                <select value={form.transmission} onChange={(e) => set({ transmission: e.target.value })} className={inputCls}>
-                  <option value="">—</option>
-                  <option value="Otomatik">Otomatik</option>
-                  <option value="Manuel">Manuel</option>
-                  <option value="Yarı Otomatik">Yarı Otomatik</option>
-                </select>
-              </label>
-              <label className="block"><span className={labelCls}>{locale === "tr" ? "Kasa" : "Body"}</span>
-                <select value={form.body_type} onChange={(e) => set({ body_type: e.target.value })} className={inputCls}>
-                  <option value="">—</option>
-                  <option value="Sedan">Sedan</option>
-                  <option value="SUV">SUV</option>
-                  <option value="Hatchback">Hatchback</option>
-                  <option value="Crossover">Crossover</option>
-                  <option value="Station Wagon">Station Wagon</option>
-                  <option value="Coupe">Coupe</option>
-                  <option value="Cabrio">Cabrio</option>
-                  <option value="MPV">MPV</option>
-                  <option value="Pick-up">Pick-up</option>
-                </select>
-              </label>
-              <label className="block"><span className={labelCls}>Segment</span>
-                <select value={form.segment} onChange={(e) => set({ segment: e.target.value })} className={inputCls}>
-                  <option value="">—</option>
-                  <option value="A">A</option><option value="B">B</option>
-                  <option value="C">C</option><option value="D">D</option>
-                  <option value="E">E</option><option value="F">F</option>
-                  <option value="C-SUV">C-SUV</option><option value="D-SUV">D-SUV</option>
-                </select>
-              </label>
-              <label className="block"><span className={labelCls}>{locale === "tr" ? "Motor Gücü (HP)" : "HP"}</span>
-                <input type="number" value={form.horsepower} onChange={(e) => set({ horsepower: e.target.value })} className={inputCls} />
-              </label>
-              <label className="block"><span className={labelCls}>{locale === "tr" ? "Motor Hacmi (cc)" : "Engine (cc)"}</span>
-                <input type="number" value={form.engine_cc} onChange={(e) => set({ engine_cc: e.target.value })} className={inputCls} />
-              </label>
-              <label className="block"><span className={labelCls}>{locale === "tr" ? "Tüketim (L/100km)" : "Consumption (L/100km)"}</span>
-                <input type="number" step="0.1" value={form.combined_fuel_consumption} onChange={(e) => set({ combined_fuel_consumption: e.target.value })} className={inputCls} />
-              </label>
-              <label className="block"><span className={labelCls}>{locale === "tr" ? "Bagaj (L)" : "Trunk (L)"}</span>
-                <input type="number" value={form.luggage_capacity} onChange={(e) => set({ luggage_capacity: e.target.value })} className={inputCls} />
-              </label>
-            </div>
-          </section>
-
-          {/* Equipment */}
-          <section className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6">
-            <h2 className="text-lg font-semibold text-white mb-4">
-              {locale === "tr" ? "Donanım" : "Equipment"}
+          {/* Group 3: Equipment chips */}
+          <section>
+            <h2 className="text-xs font-semibold uppercase tracking-wider text-[#6B7280] mb-3">
+              {isTr ? "Donanım" : "Equipment"}
             </h2>
             <div className="flex flex-wrap gap-2">
-              {EQUIPMENT_OPTIONS.map((slug) => {
-                const on = form.equipment.includes(slug);
+              {EQUIPMENT.map((eq) => {
+                const on = equipment.includes(eq.slug);
                 return (
                   <button
-                    key={slug}
+                    key={eq.slug}
                     type="button"
-                    onClick={() => toggleEquip(slug)}
-                    className={`rounded-lg border px-3 py-1.5 text-xs font-medium transition-all duration-200 ${
+                    onClick={() => toggleEquip(eq.slug)}
+                    className={`rounded-full px-3.5 py-2 text-[13px] font-medium transition-all duration-200 ${
                       on
-                        ? "border-primary-500/40 bg-primary-500/15 text-primary-300"
-                        : "border-white/[0.08] text-[#9CA3AF] hover:border-white/[0.15] hover:text-white"
+                        ? "bg-primary-500/15 text-primary-300 border border-primary-500/30"
+                        : "bg-white/[0.03] text-[#9CA3AF] border border-white/[0.06] hover:border-white/[0.12] hover:text-white"
                     }`}
                   >
-                    {EQUIPMENT_LABELS[slug] || slug}
+                    {eq.label}
                   </button>
                 );
               })}
@@ -255,37 +182,27 @@ export default function AddCarPage() {
           </section>
 
           {/* Notes */}
-          <section className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6">
-            <h2 className="text-lg font-semibold text-white mb-4">
-              {locale === "tr" ? "Notlar" : "Notes"}
-            </h2>
-            <textarea
-              value={form.notes}
-              onChange={(e) => set({ notes: e.target.value })}
-              rows={3}
-              placeholder={locale === "tr" ? "Kendi notlarınız..." : "Your notes..."}
-              className={inputCls + " resize-none"}
-            />
-          </section>
+          <textarea
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
+            rows={2}
+            placeholder={isTr ? "Notlar (opsiyonel)" : "Notes (optional)"}
+            className={inputCls + " resize-none"}
+          />
 
-          {/* Actions */}
-          <div className="flex gap-3">
-            <button
-              type="button"
-              onClick={() => router.push(`/${locale}/garage`)}
-              className="flex-1 rounded-xl border border-white/[0.08] bg-white/[0.04] py-3 text-[#E5E7EB] font-semibold hover:bg-white/[0.08] text-sm transition-all"
-            >
-              {locale === "tr" ? "İptal" : "Cancel"}
-            </button>
-            <button
-              type="button"
-              onClick={handleSubmit}
-              disabled={saving}
-              className="flex-[2] btn-gradient rounded-xl py-3 text-white font-semibold disabled:opacity-60 inline-flex items-center justify-center gap-2 text-sm"
-            >
-              {saving ? <><Loader2 className="w-4 h-4 animate-spin" /> {locale === "tr" ? "Kaydediliyor..." : "Saving..."}</> : (locale === "tr" ? "Kaydet" : "Save")}
-            </button>
-          </div>
+          {/* Save */}
+          <button
+            type="button"
+            onClick={handleSave}
+            disabled={saving}
+            className="w-full btn-gradient rounded-xl py-4 text-white font-semibold text-base inline-flex items-center justify-center gap-2 disabled:opacity-50"
+          >
+            {saving ? (
+              <><Loader2 className="w-4 h-4 animate-spin" /> {isTr ? "Kaydediliyor..." : "Saving..."}</>
+            ) : (
+              <><Save className="w-4 h-4" /> {isTr ? "Garaja Kaydet" : "Save to Garage"}</>
+            )}
+          </button>
         </div>
       </div>
     </div>
