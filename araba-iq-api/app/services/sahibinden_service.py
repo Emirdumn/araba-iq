@@ -200,102 +200,81 @@ def _build_url(req: SahibindenSearchRequest, page: int) -> str:
     return f"{BASE_URL}/{slug}?{urlencode(params)}"
 
 
-async def _create_stealth_context():
-    """Create a stealth browser context with all anti-detection measures."""
+async def search_sahibinden(req: SahibindenSearchRequest) -> SahibindenSearchResponse:
+    """Stealth search on Sahibinden.com using playwright-stealth."""
     from playwright_stealth import Stealth
     from playwright.async_api import async_playwright
 
-    stealth = Stealth()
-    pw = await stealth.use_async(async_playwright()).start()
-
-    browser = await pw.chromium.launch(
-        headless=True,
-        args=[
-            "--no-sandbox",
-            "--disable-setuid-sandbox",
-            "--disable-dev-shm-usage",
-            "--disable-blink-features=AutomationControlled",
-            "--disable-features=IsolateOrigins,site-per-process",
-            "--disable-infobars",
-        ],
-    )
-
-    ctx = await browser.new_context(
-        locale="tr-TR",
-        timezone_id="Europe/Istanbul",
-        viewport={"width": 1366, "height": 768},
-        screen={"width": 1366, "height": 768},
-        color_scheme="light",
-        user_agent=REAL_UA,
-        extra_http_headers={
-            "Accept-Language": "tr-TR,tr;q=0.9,en-US;q=0.8,en;q=0.7",
-            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-            "Sec-Fetch-Dest": "document",
-            "Sec-Fetch-Mode": "navigate",
-            "Sec-Fetch-Site": "none",
-            "Sec-Fetch-User": "?1",
-        },
-    )
-
-    saved = _load_cookies()
-    if saved:
-        await ctx.add_cookies(saved)
-
-    return pw, browser, ctx
-
-
-async def search_sahibinden(req: SahibindenSearchRequest) -> SahibindenSearchResponse:
-    """Stealth search on Sahibinden.com."""
     all_listings: list[SahibindenListing] = []
     pages_fetched = 0
 
-    pw, browser, ctx = await _create_stealth_context()
-    try:
+    stealth = Stealth()
+    async with stealth.use_async(async_playwright()) as pw:
+        browser = await pw.chromium.launch(
+            headless=True,
+            args=[
+                "--no-sandbox",
+                "--disable-setuid-sandbox",
+                "--disable-dev-shm-usage",
+                "--disable-blink-features=AutomationControlled",
+            ],
+        )
+        ctx = await browser.new_context(
+            locale="tr-TR",
+            timezone_id="Europe/Istanbul",
+            viewport={"width": 1366, "height": 768},
+            user_agent=REAL_UA,
+            extra_http_headers={"Accept-Language": "tr-TR,tr;q=0.9,en-US;q=0.8"},
+        )
+
+        saved = _load_cookies()
+        if saved:
+            await ctx.add_cookies(saved)
+
         page = await ctx.new_page()
 
-        await page.goto(BASE_URL, wait_until="domcontentloaded", timeout=20000)
-        await asyncio.sleep(random.uniform(1.5, 3.0))
-        await page.mouse.move(random.randint(100, 600), random.randint(100, 400))
+        try:
+            await page.goto(BASE_URL, wait_until="domcontentloaded", timeout=20000)
+            await asyncio.sleep(random.uniform(2.0, 4.0))
+            await page.mouse.move(random.randint(100, 600), random.randint(100, 400))
 
-        for page_num in range(req.max_pages):
-            url = _build_url(req, page_num)
-            try:
-                await page.goto(url, wait_until="domcontentloaded", timeout=20000)
-                await asyncio.sleep(random.uniform(2.0, 4.0))
-                await page.mouse.move(random.randint(200, 800), random.randint(200, 500))
-                await page.evaluate(f"window.scrollBy(0, {random.randint(200, 500)})")
-                await asyncio.sleep(random.uniform(0.5, 1.5))
-
+            for page_num in range(req.max_pages):
+                url = _build_url(req, page_num)
                 try:
-                    await page.wait_for_selector("table.searchResultsTable", timeout=10000)
+                    await page.goto(url, wait_until="domcontentloaded", timeout=20000)
+                    await asyncio.sleep(random.uniform(2.5, 5.0))
+                    await page.mouse.move(random.randint(200, 800), random.randint(200, 500))
+                    await page.evaluate(f"window.scrollBy(0, {random.randint(200, 500)})")
+                    await asyncio.sleep(random.uniform(0.5, 1.5))
+
+                    try:
+                        await page.wait_for_selector("table.searchResultsTable", timeout=10000)
+                    except Exception:
+                        break
                 except Exception:
                     break
-            except Exception:
-                break
 
-            html = await page.content()
-            page_listings = _parse_listings_page(html)
-            if not page_listings:
-                break
+                html = await page.content()
+                page_listings = _parse_listings_page(html)
+                if not page_listings:
+                    break
 
-            if req.city:
-                city_lower = req.city.lower()
-                page_listings = [l for l in page_listings if l.city and city_lower in l.city.lower()]
+                if req.city:
+                    city_lower = req.city.lower()
+                    page_listings = [l for l in page_listings if l.city and city_lower in l.city.lower()]
 
-            all_listings.extend(page_listings)
-            pages_fetched += 1
+                all_listings.extend(page_listings)
+                pages_fetched += 1
 
-            if len(page_listings) < PAGE_SIZE:
-                break
-            if page_num < req.max_pages - 1:
-                await asyncio.sleep(random.uniform(1.5, 3.0))
+                if len(page_listings) < PAGE_SIZE:
+                    break
+                if page_num < req.max_pages - 1:
+                    await asyncio.sleep(random.uniform(1.5, 3.0))
 
-        cookies = await ctx.cookies()
-        _save_cookies(cookies)
-
-    finally:
-        await browser.close()
-        await pw.stop()
+            cookies = await ctx.cookies()
+            _save_cookies(cookies)
+        finally:
+            await browser.close()
 
     stats = _compute_stats(all_listings)
     return SahibindenSearchResponse(
