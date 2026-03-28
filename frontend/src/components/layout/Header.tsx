@@ -23,6 +23,7 @@ export default function Header({ messages }: HeaderProps) {
   const pathname = usePathname();
   const router = useRouter();
   const locale = (params?.locale as string) || "tr";
+  const isTR = locale === "tr";
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -47,8 +48,8 @@ export default function Header({ messages }: HeaderProps) {
 
   const navLinks = [
     { href: `/${locale}`, label: messages.home },
+    { href: `/${locale}/garage`, label: isTR ? "Garajım" : "My Garage" },
     { href: `/${locale}/recommendations`, label: messages.navRecommendations },
-    { href: `/${locale}/compare`, label: messages.navCompare },
   ];
 
   return (
@@ -61,7 +62,7 @@ export default function Header({ messages }: HeaderProps) {
             : "bg-transparent"
         )}
       >
-        <div className="px-6 lg:px-10">
+        <div className="max-w-6xl mx-auto px-6 lg:px-10">
           <div className="flex items-center justify-between h-16 lg:h-[72px]">
             <button
               type="button"
@@ -83,7 +84,14 @@ export default function Header({ messages }: HeaderProps) {
               </span>
             </Link>
 
-            <div className="relative">
+            <div className="relative flex items-center gap-3">
+              <Link 
+                href={`/${locale}/garage`}
+                className="hidden sm:inline-flex items-center justify-center rounded-xl bg-white/[0.06] px-4 py-2 text-sm font-semibold text-[#E5E7EB] hover:bg-white/[0.1] transition-colors border border-white/[0.08]"
+              >
+                {isTR ? "Garajım" : "My Garage"}
+              </Link>
+              
               <button
                 type="button"
                 onClick={() => setLangOpen(!langOpen)}
