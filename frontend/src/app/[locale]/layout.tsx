@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import { ScrollToTop } from "@/components/layout/ScrollToTop";
 
 const locales = ["tr", "en"];
 
@@ -47,6 +48,7 @@ export default async function LocaleLayout({ children, params }: Props) {
 
   return (
     <div className="flex min-h-screen flex-col">
+      <ScrollToTop />
       <Header messages={messages.common} />
       <main className="flex-1">{children}</main>
       <Footer messages={messages.footer} locale={locale} />

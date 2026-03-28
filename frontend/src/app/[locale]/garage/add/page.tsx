@@ -160,7 +160,7 @@ export default function AddCarPage() {
             <h2 className="text-xs font-semibold uppercase tracking-wider text-[#6B7280] mb-3">
               {isTr ? "Donanım" : "Equipment"}
             </h2>
-            <div className="flex flex-wrap gap-2">
+            <div className="grid grid-cols-2 gap-2">
               {EQUIPMENT.map((eq) => {
                 const on = equipment.includes(eq.slug);
                 return (
@@ -168,13 +168,13 @@ export default function AddCarPage() {
                     key={eq.slug}
                     type="button"
                     onClick={() => toggleEquip(eq.slug)}
-                    className={`rounded-full px-3.5 py-2 text-[13px] font-medium transition-all duration-200 ${
+                    className={`rounded-xl px-4 py-3.5 text-[15px] font-medium transition-all duration-200 text-left ${
                       on
-                        ? "bg-primary-500/15 text-primary-300 border border-primary-500/30"
-                        : "bg-white/[0.03] text-[#9CA3AF] border border-white/[0.06] hover:border-white/[0.12] hover:text-white"
+                        ? "bg-primary-500/15 text-primary-300 border-2 border-primary-500/40 shadow-[0_0_12px_rgba(59,130,246,0.15)]"
+                        : "bg-white/[0.03] text-[#9CA3AF] border-2 border-white/[0.06] hover:border-white/[0.12] hover:text-white active:scale-[0.98]"
                     }`}
                   >
-                    {eq.label}
+                    {on ? "✓ " : ""}{eq.label}
                   </button>
                 );
               })}

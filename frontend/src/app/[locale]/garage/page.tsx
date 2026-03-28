@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { Plus, Car, Loader2, ArrowRight, Search, ChevronDown } from "lucide-react";
+import { Plus, Car, Loader2, ArrowRight, ArrowLeft, Search, ChevronDown } from "lucide-react";
 import { useGarageStore, MAX_COMPARE } from "@/stores/garage";
 import { GarageListRow } from "@/components/garage/GarageListRow";
 
@@ -41,6 +41,11 @@ export default function GaragePage() {
   return (
     <div className="min-h-screen pt-20 pb-32">
       <div className="max-w-xl mx-auto px-4">
+        {/* Back */}
+        <Link href={`/${locale}`} className="inline-flex items-center gap-1.5 text-sm text-[#6B7280] hover:text-white transition-colors mb-4">
+          <ArrowLeft className="w-4 h-4" /> {isTr ? "Ana sayfa" : "Home"}
+        </Link>
+
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div>
