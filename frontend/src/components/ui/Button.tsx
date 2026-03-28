@@ -12,11 +12,11 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant = "primary", size = "md", loading, children, disabled, ...props }, ref) => {
     const variants = {
-      primary: "bg-primary-600 text-white hover:bg-primary-500 glow-sm hover:glow-md",
-      secondary: "bg-white/[0.06] text-gray-200 hover:bg-white/[0.1] border border-white/[0.08]",
-      outline: "border border-primary-500/50 text-primary-400 hover:bg-primary-500/10",
-      ghost: "text-gray-400 hover:text-white hover:bg-white/[0.06]",
-      danger: "bg-red-600/80 text-white hover:bg-red-500",
+      primary: "btn-gradient text-white",
+      secondary: "bg-white/[0.06] text-[#E5E7EB] hover:bg-white/[0.1] border border-white/[0.08] hover:border-white/[0.15]",
+      outline: "border border-primary-500/40 text-primary-400 hover:bg-primary-500/10 hover:border-primary-500/60",
+      ghost: "text-[#9CA3AF] hover:text-white hover:bg-white/[0.06]",
+      danger: "bg-red-500/20 text-red-400 hover:bg-red-500/30 border border-red-500/20",
     };
 
     const sizes = {
@@ -32,7 +32,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         className={cn(
           "inline-flex items-center justify-center gap-2 rounded-xl font-semibold",
           "transition-all duration-300",
-          "disabled:opacity-40 disabled:cursor-not-allowed",
+          "disabled:opacity-40 disabled:cursor-not-allowed disabled:transform-none",
           variants[variant],
           sizes[size],
           className

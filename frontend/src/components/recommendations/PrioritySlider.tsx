@@ -9,10 +9,10 @@ interface Props {
 
 export function PrioritySlider({ label, value, onChange, disabled }: Props) {
   return (
-    <div className="space-y-1">
-      <div className="flex justify-between text-xs text-[#0d1117]/80">
-        <span>{label}</span>
-        <span className="font-mono tabular-nums">{value}</span>
+    <div className="space-y-1.5">
+      <div className="flex justify-between text-xs">
+        <span className="text-[#9CA3AF]">{label}</span>
+        <span className="font-mono tabular-nums text-primary-400">{value}</span>
       </div>
       <input
         type="range"
@@ -22,7 +22,7 @@ export function PrioritySlider({ label, value, onChange, disabled }: Props) {
         value={value}
         disabled={disabled}
         onChange={(e) => onChange(Number(e.target.value))}
-        className="w-full h-2 accent-[#2563eb] rounded-lg appearance-none bg-[#e5e7eb] disabled:opacity-50"
+        className="w-full h-1.5 rounded-lg appearance-none bg-white/[0.08] accent-primary-500 disabled:opacity-50 cursor-pointer"
       />
     </div>
   );

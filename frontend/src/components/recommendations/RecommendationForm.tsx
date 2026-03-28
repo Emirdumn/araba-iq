@@ -43,7 +43,7 @@ export function RecommendationForm({
   const set = (patch: Partial<RecommendationFormState>) => onChange({ ...s, ...patch });
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <RecommendationPresetBar
         current={s}
         t={t}
@@ -51,11 +51,11 @@ export function RecommendationForm({
         disabled={!!disabled}
       />
 
-      <section className="rounded-2xl border border-[#d1d5db]/60 bg-white p-6 shadow-sm">
-        <h2 className="text-lg font-semibold text-[#0d1117] mb-4">{t.formBasics}</h2>
+      <section className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6">
+        <h2 className="text-lg font-semibold text-white mb-4">{t.formBasics}</h2>
         <div className="grid gap-4 sm:grid-cols-2">
           <label className="block text-sm">
-            <span className="text-[#0d1117]/80">{t.budgetMax}</span>
+            <span className="text-[#9CA3AF]">{t.budgetMax}</span>
             <input
               type="number"
               min={0}
@@ -63,16 +63,16 @@ export function RecommendationForm({
               value={s.budget_max || ""}
               disabled={disabled}
               onChange={(e) => set({ budget_max: Number(e.target.value) || 0 })}
-              className="mt-1 w-full rounded-lg border border-[#d1d5db] px-3 py-2 text-[#0d1117] focus:border-[#2563eb] focus:ring-2 focus:ring-[#2563eb]/20 focus:outline-none transition-all disabled:opacity-50"
+              className="mt-1 w-full rounded-xl border border-white/[0.08] bg-white/[0.04] px-3 py-2.5 text-[#E5E7EB] focus:border-primary-500/50 focus:ring-2 focus:ring-primary-500/20 focus:outline-none transition-all disabled:opacity-50 hover:border-white/[0.15]"
             />
           </label>
           <label className="block text-sm">
-            <span className="text-[#0d1117]/80">{t.fuelPref}</span>
+            <span className="text-[#9CA3AF]">{t.fuelPref}</span>
             <select
               value={s.fuel_preference}
               disabled={disabled}
               onChange={(e) => set({ fuel_preference: e.target.value })}
-              className="mt-1 w-full rounded-lg border border-[#d1d5db] px-3 py-2 text-[#0d1117] focus:border-[#2563eb] focus:ring-2 focus:ring-[#2563eb]/20 focus:outline-none transition-all disabled:opacity-50"
+              className="mt-1 w-full rounded-xl border border-white/[0.08] bg-white/[0.04] px-3 py-2.5 text-[#E5E7EB] focus:border-primary-500/50 focus:ring-2 focus:ring-primary-500/20 focus:outline-none transition-all disabled:opacity-50 hover:border-white/[0.15]"
             >
               <option value="">{t.fuelAny}</option>
               <option value="Hybrid">{t.fuelHybrid}</option>
@@ -81,7 +81,7 @@ export function RecommendationForm({
             </select>
           </label>
           <label className="block text-sm sm:col-span-2">
-            <span className="text-[#0d1117]/80">{t.cityRatio}</span>
+            <span className="text-[#9CA3AF]">{t.cityRatio}</span>
             <input
               type="range"
               min={0}
@@ -89,12 +89,12 @@ export function RecommendationForm({
               value={s.city_usage_ratio}
               disabled={disabled}
               onChange={(e) => set({ city_usage_ratio: Number(e.target.value) })}
-              className="mt-2 w-full accent-[#2563eb]"
+              className="mt-2 w-full accent-primary-500 h-1.5 rounded-lg appearance-none bg-white/[0.08]"
             />
-            <div className="text-xs font-mono text-[#2563eb]">{s.city_usage_ratio}%</div>
+            <div className="text-xs font-mono text-primary-400 mt-1">{s.city_usage_ratio}%</div>
           </label>
           <label className="block text-sm">
-            <span className="text-[#0d1117]/80">{t.resultLimit}</span>
+            <span className="text-[#9CA3AF]">{t.resultLimit}</span>
             <input
               type="number"
               min={1}
@@ -102,14 +102,14 @@ export function RecommendationForm({
               value={s.limit}
               disabled={disabled}
               onChange={(e) => set({ limit: Math.min(50, Math.max(1, Number(e.target.value) || 10)) })}
-              className="mt-1 w-full rounded-lg border border-[#d1d5db] px-3 py-2 focus:border-[#2563eb] focus:ring-2 focus:ring-[#2563eb]/20 focus:outline-none transition-all disabled:opacity-50"
+              className="mt-1 w-full rounded-xl border border-white/[0.08] bg-white/[0.04] px-3 py-2.5 text-[#E5E7EB] focus:border-primary-500/50 focus:ring-2 focus:ring-primary-500/20 focus:outline-none transition-all disabled:opacity-50 hover:border-white/[0.15]"
             />
           </label>
         </div>
       </section>
 
-      <section className="rounded-2xl border border-[#d1d5db]/60 bg-white p-6 shadow-sm">
-        <h2 className="text-lg font-semibold text-[#0d1117] mb-4">{t.priorities}</h2>
+      <section className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6">
+        <h2 className="text-lg font-semibold text-white mb-4">{t.priorities}</h2>
         <div className="grid gap-4 sm:grid-cols-2">
           <PrioritySlider label={t.performance} value={s.performance_priority} onChange={(v) => set({ performance_priority: v })} disabled={disabled} />
           <PrioritySlider label={t.economy} value={s.economy_priority} onChange={(v) => set({ economy_priority: v })} disabled={disabled} />
@@ -121,11 +121,11 @@ export function RecommendationForm({
         </div>
       </section>
 
-      <section className="rounded-2xl border border-[#d1d5db]/60 bg-white p-6 shadow-sm">
-        <h2 className="text-lg font-semibold text-[#0d1117] mb-2">{t.segment}</h2>
-        <p className="text-xs text-[#0d1117]/60 mb-3">{t.segmentHint}</p>
+      <section className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6">
+        <h2 className="text-lg font-semibold text-white mb-2">{t.segment}</h2>
+        <p className="text-xs text-[#6B7280] mb-3">{t.segmentHint}</p>
         {segmentsLoading ? (
-          <p className="text-sm text-[#0d1117]/50">{t.segmentsLoading}</p>
+          <p className="text-sm text-[#6B7280]">{t.segmentsLoading}</p>
         ) : (
           <div className="flex flex-wrap gap-2">
             {segments.map((seg) => {
@@ -136,8 +136,10 @@ export function RecommendationForm({
                   type="button"
                   disabled={disabled}
                   onClick={() => set({ segment_ids: toggleSegment(s.segment_ids, seg.id) })}
-                  className={`rounded-full px-3 py-1.5 text-sm font-medium transition-colors disabled:opacity-50 ${
-                    on ? "bg-[#2563eb] text-white" : "bg-[#f4f5f7] text-[#0d1117] hover:bg-[#e5e7eb]"
+                  className={`rounded-full px-3.5 py-1.5 text-sm font-medium transition-all duration-200 disabled:opacity-50 ${
+                    on
+                      ? "bg-primary-500/20 text-primary-300 border border-primary-500/40 shadow-glow-sm"
+                      : "bg-white/[0.04] text-[#9CA3AF] border border-white/[0.08] hover:border-white/[0.15] hover:text-white"
                   }`}
                 >
                   {seg.name}
@@ -148,11 +150,11 @@ export function RecommendationForm({
         )}
       </section>
 
-      <section className="rounded-2xl border border-[#d1d5db]/60 bg-white p-6 shadow-sm">
-        <h2 className="text-lg font-semibold text-[#0d1117] mb-2">{t.equipment}</h2>
-        <p className="text-xs text-[#0d1117]/60 mb-3">{t.equipmentHint}</p>
+      <section className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6">
+        <h2 className="text-lg font-semibold text-white mb-2">{t.equipment}</h2>
+        <p className="text-xs text-[#6B7280] mb-3">{t.equipmentHint}</p>
         <div className="mb-4">
-          <h3 className="text-sm font-medium text-[#0d1117] mb-2">{t.required}</h3>
+          <h3 className="text-sm font-medium text-[#E5E7EB] mb-2">{t.required}</h3>
           <div className="flex flex-wrap gap-2">
             {FEATURE_SLUGS.map((slug) => {
               const on = s.required_features.includes(slug);
@@ -167,8 +169,10 @@ export function RecommendationForm({
                       preferred_features: s.preferred_features.filter((x) => x !== slug),
                     })
                   }
-                  className={`rounded-lg border px-2.5 py-1 text-xs disabled:opacity-50 ${
-                    on ? "border-[#2563eb] bg-[#2563eb]/10 text-[#0d1117] font-medium" : "border-[#d1d5db] text-[#0d1117]/80"
+                  className={`rounded-lg border px-2.5 py-1 text-xs transition-all duration-200 disabled:opacity-50 ${
+                    on
+                      ? "border-primary-500/40 bg-primary-500/15 text-primary-300 font-medium"
+                      : "border-white/[0.08] text-[#9CA3AF] hover:border-white/[0.15] hover:text-white"
                   }`}
                 >
                   {featureLabel(t, slug)}
@@ -178,7 +182,7 @@ export function RecommendationForm({
           </div>
         </div>
         <div>
-          <h3 className="text-sm font-medium text-[#0d1117] mb-2">{t.preferredBonus}</h3>
+          <h3 className="text-sm font-medium text-[#E5E7EB] mb-2">{t.preferredBonus}</h3>
           <div className="flex flex-wrap gap-2">
             {FEATURE_SLUGS.map((slug) => {
               if (s.required_features.includes(slug)) return null;
@@ -189,8 +193,10 @@ export function RecommendationForm({
                   type="button"
                   disabled={disabled}
                   onClick={() => set({ preferred_features: toggleSlug(s.preferred_features, slug) })}
-                  className={`rounded-lg border px-2.5 py-1 text-xs disabled:opacity-50 ${
-                    on ? "border-amber-500/50 bg-amber-50 text-[#0d1117] font-medium" : "border-[#d1d5db] text-[#0d1117]/80"
+                  className={`rounded-lg border px-2.5 py-1 text-xs transition-all duration-200 disabled:opacity-50 ${
+                    on
+                      ? "border-amber-500/40 bg-amber-500/10 text-amber-300 font-medium"
+                      : "border-white/[0.08] text-[#9CA3AF] hover:border-white/[0.15] hover:text-white"
                   }`}
                 >
                   {featureLabel(t, slug)}
@@ -201,17 +207,17 @@ export function RecommendationForm({
         </div>
       </section>
 
-      <section className="rounded-2xl border border-[#d1d5db]/60 bg-white p-6 shadow-sm">
-        <h2 className="text-lg font-semibold text-[#0d1117] mb-4">{t.options}</h2>
+      <section className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6">
+        <h2 className="text-lg font-semibold text-white mb-4">{t.options}</h2>
         <label className="flex items-center gap-3 cursor-pointer">
           <input
             type="checkbox"
             checked={s.strict_required}
             disabled={disabled}
             onChange={(e) => set({ strict_required: e.target.checked })}
-            className="h-4 w-4 accent-[#2563eb]"
+            className="h-4 w-4 rounded border-white/20 bg-white/[0.06] accent-primary-500"
           />
-          <span className="text-sm text-[#0d1117]">{t.strictRequired}</span>
+          <span className="text-sm text-[#E5E7EB]">{t.strictRequired}</span>
         </label>
         <label className="flex items-center gap-3 cursor-pointer mt-3">
           <input
@@ -219,9 +225,9 @@ export function RecommendationForm({
             checked={s.include_debug}
             disabled={disabled}
             onChange={(e) => set({ include_debug: e.target.checked })}
-            className="h-4 w-4 accent-[#2563eb]"
+            className="h-4 w-4 rounded border-white/20 bg-white/[0.06] accent-primary-500"
           />
-          <span className="text-sm text-[#0d1117]">{t.includeDebug}</span>
+          <span className="text-sm text-[#E5E7EB]">{t.includeDebug}</span>
         </label>
       </section>
     </div>

@@ -3,13 +3,13 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "ArabaIQ",
-  description: "Car recommendations and comparison platform",
+  description: "Data-driven car recommendations and comparison platform",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="tr">
-      <body className="min-h-screen flex flex-col bg-[#f4f5f7] text-[#0d1117] antialiased">
+    <html lang="tr" className="dark">
+      <body className="min-h-screen flex flex-col bg-[#020617] text-[#E5E7EB] antialiased">
         {children}
       </body>
     </html>

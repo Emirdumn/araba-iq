@@ -125,34 +125,34 @@ export default function RecommendationsPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#f4f5f7] pt-20 pb-16">
+    <div className="min-h-screen pt-24 pb-16">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <header className="mb-8">
-          <div className="inline-flex items-center gap-2 rounded-full bg-[#2563eb]/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-[#2563eb] mb-3">
+          <div className="inline-flex items-center gap-2 rounded-full border border-primary-500/20 bg-primary-500/[0.06] px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wider text-primary-400 mb-3">
             <Sparkles className="w-3.5 h-3.5" />
             {t.badge}
           </div>
-          <h1 className="text-3xl font-extrabold text-[#0d1117] font-display">{t.title}</h1>
-          <p className="mt-2 text-[#0d1117]/75 max-w-2xl text-sm leading-relaxed">{t.subtitle}</p>
+          <h1 className="text-3xl font-extrabold text-white font-display">{t.title}</h1>
+          <p className="mt-2 text-[#9CA3AF] max-w-2xl text-sm leading-relaxed">{t.subtitle}</p>
         </header>
 
         {ids.length > 0 && (
-          <div className="sticky top-16 z-30 mb-6 flex flex-col gap-3 rounded-xl border-2 border-[#2563eb]/45 bg-white/95 px-4 py-3 shadow-lg shadow-[#0d1117]/10 backdrop-blur-sm sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
+          <div className="sticky top-[72px] z-30 mb-6 flex flex-col gap-3 rounded-xl border border-primary-500/30 bg-[#0B1120]/95 backdrop-blur-xl px-4 py-3 shadow-lg shadow-black/20 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-wider text-[#2563eb]">{t.compareTray}</p>
-              <p className="text-xs text-[#0d1117]/70 mt-0.5">{t.compareTraySubtitle}</p>
-              <p className="text-sm font-semibold text-[#0d1117] mt-1 tabular-nums">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-primary-400">{t.compareTray}</p>
+              <p className="text-xs text-[#6B7280] mt-0.5">{t.compareTraySubtitle}</p>
+              <p className="text-sm font-semibold text-white mt-1 tabular-nums">
                 {ids.length}/{MAX_COMPARE}
               </p>
             </div>
             <Link
               href={`/${locale}/compare`}
-              className={`inline-flex items-center justify-center rounded-xl text-center font-semibold transition-all shrink-0 ${
+              className={`inline-flex items-center justify-center rounded-xl text-center font-semibold transition-all duration-300 shrink-0 ${
                 ids.length >= 2
-                  ? "bg-[#2563eb] text-white hover:bg-[#1d4ed8] shadow-md ring-2 ring-[#2563eb]/35 px-6 py-3 text-base"
+                  ? "btn-gradient text-white px-6 py-3 text-base"
                   : ids.length === 1
-                    ? "border-2 border-[#2563eb] text-[#2563eb] bg-white hover:bg-[#2563eb]/10 px-4 py-2.5 text-sm"
-                    : "bg-[#f4f5f7] text-[#0d1117]/50 pointer-events-none px-4 py-2.5 text-sm"
+                    ? "border border-primary-500/40 text-primary-400 bg-primary-500/10 hover:bg-primary-500/20 px-4 py-2.5 text-sm"
+                    : "bg-white/[0.04] text-[#6B7280] pointer-events-none px-4 py-2.5 text-sm"
               }`}
             >
               {ids.length >= 2
@@ -165,18 +165,18 @@ export default function RecommendationsPage() {
         <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
           <div>
             {presetBanner && (
-              <div className="mb-4 rounded-xl border border-[#2563eb]/35 bg-[#2563eb]/8 p-4 relative pr-10">
+              <div className="mb-4 rounded-xl border border-primary-500/25 bg-primary-500/[0.06] p-4 relative pr-10">
                 <button
                   type="button"
                   onClick={() => setPresetBanner(null)}
-                  className="absolute top-3 right-3 p-1 rounded-full hover:bg-white/60 text-[#0d1117]/50"
+                  className="absolute top-3 right-3 p-1 rounded-full hover:bg-white/[0.08] text-[#6B7280]"
                   aria-label={t.presetCloseBanner}
                 >
                   <X className="w-4 h-4" />
                 </button>
-                <p className="text-xs font-bold uppercase tracking-wider text-[#2563eb]">{t.presetAppliedTitle}</p>
-                <p className="text-sm font-semibold text-[#0d1117] mt-1">{presetBanner.label}</p>
-                <p className="text-xs text-[#0d1117]/75 mt-2">
+                <p className="text-xs font-bold uppercase tracking-wider text-primary-400">{t.presetAppliedTitle}</p>
+                <p className="text-sm font-semibold text-white mt-1">{presetBanner.label}</p>
+                <p className="text-xs text-[#9CA3AF] mt-2">
                   {presetBanner.budgetPreserved
                     ? interpolate(t.presetBudgetKept, {
                         amount: presetBanner.budgetAmount.toLocaleString(locale === "tr" ? "tr-TR" : "en-US"),
@@ -185,8 +185,8 @@ export default function RecommendationsPage() {
                 </p>
                 {presetBanner.lines.length > 0 && (
                   <>
-                    <p className="text-xs font-semibold text-[#0d1117] mt-3">{t.presetChangedFields}</p>
-                    <ul className="mt-1 text-xs text-[#0d1117]/80 list-disc pl-4 space-y-0.5">
+                    <p className="text-xs font-semibold text-white mt-3">{t.presetChangedFields}</p>
+                    <ul className="mt-1 text-xs text-[#9CA3AF] list-disc pl-4 space-y-0.5">
                       {presetBanner.lines.map((line, i) => (
                         <li key={i}>{line}</li>
                       ))}
@@ -210,7 +210,7 @@ export default function RecommendationsPage() {
                 type="button"
                 onClick={resetForm}
                 disabled={loading}
-                className="flex-1 rounded-xl border-2 border-[#d1d5db]/60 bg-white py-3 text-[#0d1117] font-semibold hover:bg-[#f4f5f7]/50 disabled:opacity-50 text-sm"
+                className="flex-1 rounded-xl border border-white/[0.08] bg-white/[0.04] py-3 text-[#E5E7EB] font-semibold hover:bg-white/[0.08] hover:border-white/[0.15] disabled:opacity-50 text-sm transition-all duration-200"
               >
                 {t.resetForm}
               </button>
@@ -218,7 +218,7 @@ export default function RecommendationsPage() {
                 type="button"
                 onClick={submit}
                 disabled={loading}
-                className="flex-[2] rounded-xl bg-[#2563eb] py-3.5 text-white font-semibold hover:bg-[#1d4ed8] disabled:opacity-60 inline-flex items-center justify-center gap-2"
+                className="flex-[2] btn-gradient rounded-xl py-3.5 text-white font-semibold disabled:opacity-60 inline-flex items-center justify-center gap-2"
               >
                 {loading ? (
                   <>
@@ -234,14 +234,14 @@ export default function RecommendationsPage() {
 
           <div>
             {error && (
-              <div className="mb-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-900">
+              <div className="mb-4 rounded-xl border border-red-500/20 bg-red-500/[0.06] px-4 py-3 text-sm text-red-300">
                 {error}
               </div>
             )}
 
             {loading && (
               <div className="space-y-3">
-                <p className="text-sm text-[#0d1117]/60 flex items-center gap-2">
+                <p className="text-sm text-[#6B7280] flex items-center gap-2">
                   <Loader2 className="w-4 h-4 animate-spin" />
                   {t.scoringWait}
                 </p>
@@ -251,57 +251,44 @@ export default function RecommendationsPage() {
 
             {!loading && data && (
               <>
-                <div className="mb-4 text-sm text-[#0d1117]/80 font-mono">
+                <div className="mb-4 text-sm text-[#9CA3AF] font-mono">
                   {interpolate(t.statsLine, { total: data.total_candidates, returned: data.returned_count })}
                 </div>
 
                 {data.total_candidates === 0 && data.results.length === 0 && (
-                  <div className="rounded-xl border border-[#d1d5db]/50 bg-white/80 px-5 py-8 mb-4">
-                    <p className="font-semibold text-[#0d1117] mb-2">{t.emptyNoCandidatesTitle}</p>
-                    <p className="text-sm text-[#0d1117]/80 leading-relaxed">{t.emptyNoCandidatesBody}</p>
-                    <p className="text-xs font-semibold text-[#0d1117]/75 mt-5 mb-2">{t.emptyQuickActions}</p>
+                  <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] px-5 py-8 mb-4">
+                    <p className="font-semibold text-white mb-2">{t.emptyNoCandidatesTitle}</p>
+                    <p className="text-sm text-[#9CA3AF] leading-relaxed">{t.emptyNoCandidatesBody}</p>
+                    <p className="text-xs font-semibold text-[#9CA3AF] mt-5 mb-2">{t.emptyQuickActions}</p>
                     <div className="flex flex-wrap gap-2">
-                      <button
-                        type="button"
-                        onClick={emptyRaiseBudget}
-                        className="rounded-full border border-[#2563eb]/45 bg-white px-3 py-1.5 text-xs font-semibold text-[#0d1117] hover:bg-[#2563eb]/10 transition-colors"
-                      >
-                        {t.emptyActionRaiseBudget}
-                      </button>
-                      <button
-                        type="button"
-                        onClick={emptyStrictOff}
-                        className="rounded-full border border-[#2563eb]/45 bg-white px-3 py-1.5 text-xs font-semibold text-[#0d1117] hover:bg-[#2563eb]/10 transition-colors"
-                      >
-                        {t.emptyActionStrictOff}
-                      </button>
-                      <button
-                        type="button"
-                        onClick={emptyReduceFeatures}
-                        className="rounded-full border border-[#2563eb]/45 bg-white px-3 py-1.5 text-xs font-semibold text-[#0d1117] hover:bg-[#2563eb]/10 transition-colors"
-                      >
-                        {t.emptyActionReduceFeatures}
-                      </button>
-                      <button
-                        type="button"
-                        onClick={emptyClearSegments}
-                        className="rounded-full border border-[#2563eb]/45 bg-white px-3 py-1.5 text-xs font-semibold text-[#0d1117] hover:bg-[#2563eb]/10 transition-colors"
-                      >
-                        {t.emptyActionClearSegments}
-                      </button>
+                      {[
+                        { action: emptyRaiseBudget, label: t.emptyActionRaiseBudget },
+                        { action: emptyStrictOff, label: t.emptyActionStrictOff },
+                        { action: emptyReduceFeatures, label: t.emptyActionReduceFeatures },
+                        { action: emptyClearSegments, label: t.emptyActionClearSegments },
+                      ].map(({ action, label }) => (
+                        <button
+                          key={label}
+                          type="button"
+                          onClick={action}
+                          className="rounded-full border border-primary-500/30 bg-primary-500/[0.06] px-3 py-1.5 text-xs font-semibold text-primary-300 hover:bg-primary-500/15 transition-colors"
+                        >
+                          {label}
+                        </button>
+                      ))}
                     </div>
                   </div>
                 )}
 
                 {data.results.length === 0 && data.total_candidates > 0 && (
-                  <div className="rounded-xl border border-amber-200 bg-amber-50/80 px-5 py-6 text-sm text-amber-950 mb-4">
+                  <div className="rounded-xl border border-amber-500/20 bg-amber-500/[0.06] px-5 py-6 text-sm text-amber-200 mb-4">
                     <p className="font-semibold mb-1">{t.emptyPartialTitle}</p>
                     <p>{t.emptyPartialBody}</p>
                   </div>
                 )}
 
                 {compareHint && (
-                  <p className="mb-3 text-sm text-amber-800 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">{compareHint}</p>
+                  <p className="mb-3 text-sm text-amber-300 bg-amber-500/[0.06] border border-amber-500/20 rounded-lg px-3 py-2">{compareHint}</p>
                 )}
 
                 <div className="grid gap-5 md:grid-cols-1 xl:grid-cols-2">
@@ -327,8 +314,8 @@ export default function RecommendationsPage() {
             )}
 
             {!loading && !data && !error && (
-              <div className="rounded-xl border border-dashed border-[#d1d5db]/60 bg-white/40 px-5 py-12 text-center">
-                <p className="text-sm text-[#0d1117]/70 max-w-md mx-auto leading-relaxed">{t.initialHint}</p>
+              <div className="rounded-xl border border-dashed border-white/[0.1] bg-white/[0.02] px-5 py-12 text-center">
+                <p className="text-sm text-[#6B7280] max-w-md mx-auto leading-relaxed">{t.initialHint}</p>
               </div>
             )}
           </div>

@@ -27,8 +27,8 @@ export function RecommendationPresetBar({ current, t, onApply, disabled }: Props
   };
 
   return (
-    <div className="rounded-2xl border border-[#2563eb]/25 bg-[#2563eb]/4 p-4">
-      <p className="text-xs font-semibold uppercase tracking-wider text-[#2563eb] mb-2">{t.presetsTitle}</p>
+    <div className="rounded-2xl border border-primary-500/20 bg-primary-500/[0.04] p-4">
+      <p className="text-xs font-semibold uppercase tracking-wider text-primary-400 mb-3">{t.presetsTitle}</p>
       <div className="flex flex-wrap gap-2">
         {RECOMMENDATION_PRESETS.map((p) => (
           <button
@@ -37,7 +37,7 @@ export function RecommendationPresetBar({ current, t, onApply, disabled }: Props
             disabled={disabled}
             title={presetCardDescription(t, p.id)}
             onClick={() => apply(p)}
-            className="rounded-lg bg-white px-3 py-2 text-sm font-medium text-[#0d1117] shadow-sm border border-[#d1d5db]/60 hover:border-[#2563eb] hover:bg-[#2563eb]/5 transition-colors disabled:opacity-50"
+            className="rounded-lg bg-white/[0.04] px-3 py-2 text-sm font-medium text-[#E5E7EB] border border-white/[0.08] hover:border-primary-500/40 hover:bg-primary-500/10 transition-all duration-200 disabled:opacity-50"
           >
             {presetCardTitle(t, p.id)}
           </button>
