@@ -1,27 +1,27 @@
 """
-sahibinden_service.py
-─────────────────────────────────────────────────────────────
-Sahibinden.com ilan scraper servisi.
+sahibinden_service.py — Stealth Scraper
+───────────────────────────────────────
+Sahibinden.com scraper with playwright-stealth anti-detection.
 
-Yöntem: Playwright (headless Chromium) + BeautifulSoup HTML parser.
-Playwright gerçek bir browser çalıştırdığından Cloudflare JS
-challenge'larını geçebilir.
-
-Kullanım:
-    from app.services.sahibinden_service import search_sahibinden
-    result = await search_sahibinden(req)
+Uses:
+- playwright-stealth for fingerprint evasion
+- Realistic browser behavior (mouse, scroll, delays)
+- Cookie persistence between sessions
+- Fallback parsing strategies
 """
 
 from __future__ import annotations
 
 import asyncio
+import json
+import random
 import re
 import statistics
+from pathlib import Path
 from typing import Optional
 from urllib.parse import urlencode
 
 from bs4 import BeautifulSoup
-from playwright.async_api import async_playwright, TimeoutError as PlaywrightTimeout
 
 from app.schemas.sahibinden import (
     SahibindenListing,
@@ -32,27 +32,25 @@ from app.schemas.sahibinden import (
 
 BASE_URL = "https://www.sahibinden.com"
 PAGE_SIZE = 50
+COOKIE_FILE = Path("/tmp/sahibinden_api_cookies.json")
 
-# Yakıt tipi normalizasyon tablosu
+REAL_UA = (
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+    "AppleWebKit/537.36 (KHTML, like Gecko) "
+    "Chrome/131.0.0.0 Safari/537.36"
+)
+
 _FUEL_MAP: dict[str, str] = {
-    "benzin": "Benzin",
-    "dizel": "Dizel",
-    "lpg": "LPG",
-    "lpg & benzin": "LPG",
-    "elektrik": "Elektrik",
-    "hibrit": "Hibrit",
-    "hybrid": "Hibrit",
+    "benzin": "Benzin", "dizel": "Dizel", "lpg": "LPG",
+    "lpg & benzin": "LPG", "elektrik": "Elektrik",
+    "hibrit": "Hibrit", "hybrid": "Hibrit",
 }
 
-# Şehir adı normalizasyonu
 _CITY_CORRECTIONS: dict[str, str] = {
-    "i̇stanbul": "İstanbul",
-    "i̇zmir": "İzmir",
-    "ankara": "Ankara",
+    "i̇stanbul": "İstanbul", "i̇zmir": "İzmir", "ankara": "Ankara",
 }
 
 
-# ─── Yardımcı parse fonksiyonları ───────────────────────────────────
 def _parse_price(text: str) -> Optional[int]:
     cleaned = re.sub(r"[^\d]", "", text)
     if cleaned:
@@ -76,19 +74,23 @@ def _normalize_city(raw: str) -> str:
     return _CITY_CORRECTIONS.get(low, raw.strip().title())
 
 
-# ─── HTML parser ─────────────────────────────────────────────────────
-def _parse_listings_page(html: str) -> list[SahibindenListing]:
-    """
-    Sahibinden.com arama sonuç sayfasını parse et.
+def _save_cookies(cookies: list[dict]):
+    try:
+        COOKIE_FILE.write_text(json.dumps(cookies, ensure_ascii=False))
+    except Exception:
+        pass
 
-    Tablo yapısı:
-        <table class="searchResultsTable">
-          <tr class="searchResultsItem ...">
-            <td class="searchResultsTitleValue">
-            <td class="searchResultsAttributeValue">  (×2: yıl, km)
-            <td class="searchResultsPriceValue">
-            <td class="searchResultsDateValue">       (tarih + şehir)
-    """
+
+def _load_cookies() -> list[dict] | None:
+    if COOKIE_FILE.exists():
+        try:
+            return json.loads(COOKIE_FILE.read_text())
+        except Exception:
+            pass
+    return None
+
+
+def _parse_listings_page(html: str) -> list[SahibindenListing]:
     soup = BeautifulSoup(html, "lxml")
     results: list[SahibindenListing] = []
 
@@ -104,15 +106,12 @@ def _parse_listings_page(html: str) -> list[SahibindenListing]:
                 results.append(listing)
         except Exception:
             continue
-
     return results
 
 
 def _parse_row(row) -> Optional[SahibindenListing]:
-    # ── İlan ID ──
     ad_id = row.get("data-id") or row.get("id", "").replace("listing-", "") or None
 
-    # ── Başlık & URL ──
     title_td = row.find("td", class_="searchResultsTitleValue")
     if not title_td:
         return None
@@ -123,7 +122,6 @@ def _parse_row(row) -> Optional[SahibindenListing]:
     href = a_tag.get("href", "")
     url = (BASE_URL + href) if href.startswith("/") else href or None
 
-    # ── Fiyat ──
     price_td = row.find("td", class_="searchResultsPriceValue")
     if not price_td:
         return None
@@ -132,7 +130,6 @@ def _parse_row(row) -> Optional[SahibindenListing]:
     if not price:
         return None
 
-    # ── Özellikler (yıl, km) ──
     attr_tds = row.find_all("td", class_="searchResultsAttributeValue")
     year: Optional[int] = None
     km: Optional[int] = None
@@ -142,7 +139,6 @@ def _parse_row(row) -> Optional[SahibindenListing]:
     elif len(attr_tds) == 1:
         year = _parse_year(attr_tds[0].get_text(strip=True))
 
-    # ── Şehir / tarih ──
     date_td = row.find("td", class_="searchResultsDateValue")
     city: Optional[str] = None
     district: Optional[str] = None
@@ -158,7 +154,6 @@ def _parse_row(row) -> Optional[SahibindenListing]:
         elif len(spans) == 1:
             city = _normalize_city(spans[0].get_text(strip=True))
 
-    # ── Satıcı tipi ──
     seller_type: Optional[str] = None
     store_td = row.find("td", class_="searchResultsUserNameValue")
     if store_td:
@@ -166,39 +161,15 @@ def _parse_row(row) -> Optional[SahibindenListing]:
         seller_type = "galeri" if galeri_el else "sahibinden"
 
     return SahibindenListing(
-        ad_id=ad_id,
-        title=title,
-        price=price,
-        year=year,
-        km=km,
-        city=city,
-        district=district,
-        seller_type=seller_type,
-        listed_at=listed_at,
-        url=url,
+        ad_id=ad_id, title=title, price=price, year=year, km=km,
+        city=city, district=district, seller_type=seller_type,
+        listed_at=listed_at, url=url,
     )
 
 
-# ─── URL builder ────────────────────────────────────────────────────
-_SORT_MAP = {
-    "date_desc":  "date_desc",
-    "price_asc":  "price_asc",
-    "price_desc": "price_desc",
-    "km_asc":     "km_asc",
-}
-
-_FUEL_SLUG_MAP = {
-    "benzin":   "1",
-    "dizel":    "3",
-    "lpg":      "2",
-    "elektrik": "5",
-    "hibrit":   "7",
-}
-
-_TRANS_SLUG_MAP = {
-    "manuel":   "1",
-    "otomatik": "2",
-}
+_SORT_MAP = {"date_desc": "date_desc", "price_asc": "price_asc", "price_desc": "price_desc", "km_asc": "km_asc"}
+_FUEL_SLUG_MAP = {"benzin": "1", "dizel": "3", "lpg": "2", "elektrik": "5", "hibrit": "7"}
+_TRANS_SLUG_MAP = {"manuel": "1", "otomatik": "2"}
 
 
 def _build_url(req: SahibindenSearchRequest, page: int) -> str:
@@ -221,7 +192,6 @@ def _build_url(req: SahibindenSearchRequest, page: int) -> str:
     fuel_key = (req.fuel_type or "").lower()
     if fuel_key in _FUEL_SLUG_MAP:
         params["fuel_type"] = _FUEL_SLUG_MAP[fuel_key]
-
     trans_key = (req.transmission or "").lower()
     if trans_key in _TRANS_SLUG_MAP:
         params["gear"] = _TRANS_SLUG_MAP[trans_key]
@@ -230,94 +200,106 @@ def _build_url(req: SahibindenSearchRequest, page: int) -> str:
     return f"{BASE_URL}/{slug}?{urlencode(params)}"
 
 
-# ─── Ana servis fonksiyonu ───────────────────────────────────────────
+async def _create_stealth_context():
+    """Create a stealth browser context with all anti-detection measures."""
+    from playwright_stealth import Stealth
+    from playwright.async_api import async_playwright
+
+    stealth = Stealth()
+    pw = await stealth.use_async(async_playwright()).start()
+
+    browser = await pw.chromium.launch(
+        headless=True,
+        args=[
+            "--no-sandbox",
+            "--disable-setuid-sandbox",
+            "--disable-dev-shm-usage",
+            "--disable-blink-features=AutomationControlled",
+            "--disable-features=IsolateOrigins,site-per-process",
+            "--disable-infobars",
+        ],
+    )
+
+    ctx = await browser.new_context(
+        locale="tr-TR",
+        timezone_id="Europe/Istanbul",
+        viewport={"width": 1366, "height": 768},
+        screen={"width": 1366, "height": 768},
+        color_scheme="light",
+        user_agent=REAL_UA,
+        extra_http_headers={
+            "Accept-Language": "tr-TR,tr;q=0.9,en-US;q=0.8,en;q=0.7",
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+            "Sec-Fetch-Dest": "document",
+            "Sec-Fetch-Mode": "navigate",
+            "Sec-Fetch-Site": "none",
+            "Sec-Fetch-User": "?1",
+        },
+    )
+
+    saved = _load_cookies()
+    if saved:
+        await ctx.add_cookies(saved)
+
+    return pw, browser, ctx
+
+
 async def search_sahibinden(req: SahibindenSearchRequest) -> SahibindenSearchResponse:
-    """
-    Sahibinden.com'dan ilan çek, piyasa istatistiklerini hesapla.
-    Playwright headless Chromium ile Cloudflare JS challenge'larını geçer.
-    """
+    """Stealth search on Sahibinden.com."""
     all_listings: list[SahibindenListing] = []
     pages_fetched = 0
 
-    async with async_playwright() as pw:
-        browser = await pw.chromium.launch(
-            headless=True,
-            args=[
-                "--no-sandbox",
-                "--disable-setuid-sandbox",
-                "--disable-dev-shm-usage",
-                "--disable-blink-features=AutomationControlled",
-            ],
-        )
-        context = await browser.new_context(
-            locale="tr-TR",
-            user_agent=(
-                "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
-                "AppleWebKit/537.36 (KHTML, like Gecko) "
-                "Chrome/124.0.0.0 Safari/537.36"
-            ),
-            viewport={"width": 1440, "height": 900},
-            extra_http_headers={
-                "Accept-Language": "tr-TR,tr;q=0.9,en-US;q=0.8",
-            },
-        )
+    pw, browser, ctx = await _create_stealth_context()
+    try:
+        page = await ctx.new_page()
 
-        # navigator.webdriver gizle
-        await context.add_init_script(
-            "Object.defineProperty(navigator, 'webdriver', {get: () => undefined})"
-        )
+        await page.goto(BASE_URL, wait_until="domcontentloaded", timeout=20000)
+        await asyncio.sleep(random.uniform(1.5, 3.0))
+        await page.mouse.move(random.randint(100, 600), random.randint(100, 400))
 
-        page = await context.new_page()
+        for page_num in range(req.max_pages):
+            url = _build_url(req, page_num)
+            try:
+                await page.goto(url, wait_until="domcontentloaded", timeout=20000)
+                await asyncio.sleep(random.uniform(2.0, 4.0))
+                await page.mouse.move(random.randint(200, 800), random.randint(200, 500))
+                await page.evaluate(f"window.scrollBy(0, {random.randint(200, 500)})")
+                await asyncio.sleep(random.uniform(0.5, 1.5))
 
-        try:
-            for page_num in range(req.max_pages):
-                url = _build_url(req, page_num)
                 try:
-                    await page.goto(url, wait_until="domcontentloaded", timeout=20000)
-                    # Cloudflare geçiş sayfası için bekle
-                    await asyncio.sleep(2)
-                    # searchResultsTable yüklenene kadar bekle (max 10s)
-                    try:
-                        await page.wait_for_selector(
-                            "table.searchResultsTable", timeout=10000
-                        )
-                    except PlaywrightTimeout:
-                        # Tablo yok → blok ya da boş sonuç
-                        break
-                except PlaywrightTimeout:
+                    await page.wait_for_selector("table.searchResultsTable", timeout=10000)
+                except Exception:
                     break
+            except Exception:
+                break
 
-                html = await page.content()
-                page_listings = _parse_listings_page(html)
+            html = await page.content()
+            page_listings = _parse_listings_page(html)
+            if not page_listings:
+                break
 
-                if not page_listings:
-                    break
+            if req.city:
+                city_lower = req.city.lower()
+                page_listings = [l for l in page_listings if l.city and city_lower in l.city.lower()]
 
-                if req.city:
-                    city_lower = req.city.lower()
-                    page_listings = [
-                        l for l in page_listings
-                        if l.city and city_lower in l.city.lower()
-                    ]
+            all_listings.extend(page_listings)
+            pages_fetched += 1
 
-                all_listings.extend(page_listings)
-                pages_fetched += 1
+            if len(page_listings) < PAGE_SIZE:
+                break
+            if page_num < req.max_pages - 1:
+                await asyncio.sleep(random.uniform(1.5, 3.0))
 
-                if len(page_listings) < PAGE_SIZE:
-                    break
+        cookies = await ctx.cookies()
+        _save_cookies(cookies)
 
-                if page_num < req.max_pages - 1:
-                    await asyncio.sleep(1.0)
-
-        finally:
-            await browser.close()
+    finally:
+        await browser.close()
+        await pw.stop()
 
     stats = _compute_stats(all_listings)
     return SahibindenSearchResponse(
-        query=req,
-        stats=stats,
-        listings=all_listings,
-        pages_fetched=pages_fetched,
+        query=req, stats=stats, listings=all_listings, pages_fetched=pages_fetched,
     )
 
 
