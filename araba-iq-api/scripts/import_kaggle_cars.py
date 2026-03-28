@@ -66,7 +66,7 @@ def main():
     df = kagglehub.load_dataset(
         KaggleDatasetAdapter.PANDAS,
         "alpertemel/turkey-car-market-2020",
-        "",
+        "turkey_car_market.csv",
     )
 
     print(f"Dataset loaded: {len(df)} rows, columns: {list(df.columns)}")
